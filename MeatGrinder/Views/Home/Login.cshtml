@@ -1,0 +1,97 @@
+﻿@model MeatGrinder.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="center">
+    <h1>Welcome To Meat Grinder</h1>
+    <h3>Don't just plan goals, complete them!</h3>    
+</div>
+
+<table>
+    <tr>
+        <td>
+            <h2 class="center">Login</h2>
+        </td>
+        <td>
+            <h2 class="center">Register</h2>            
+        </td>
+    </tr>
+    <tr>
+        <td>
+        <div class="center" style="margin-top: 20px;">
+            @using (Html.BeginForm()) {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true)
+
+                <table class="table-center">
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.EmailAddress, "Email")
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.EmailAddress)
+                            @Html.ValidationMessageFor(model => model.EmailAddress)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Password)
+                        </td>
+                        <td>
+                            @Html.PasswordFor(model => model.Password)
+                            @Html.ValidationMessageFor(model => model.Password)
+                        </td>
+                    </tr>
+                    <tr><td></td><td></td></tr>
+                </table>
+                <p style="margin-top: 20px;">
+                    <input type="submit" value="Login" />
+                </p>
+            }
+        </div>        
+    </td>
+        <td>        
+        <div class="center" style="margin-top: 20px;">
+            @using (Html.BeginForm("Register", "Home"))
+            {
+                <table class="table-center">
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.AccountName)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.AccountName)
+                            @Html.ValidationMessageFor(model => model.AccountName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.EmailAddress)
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.EmailAddress)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.Password)
+                        </td>
+                        <td>
+                            @Html.PasswordFor(model => model.Password)
+                        </td>
+                    </tr>
+                </table>
+                <p style="margin-top: 20px;">
+                    <input type="submit" value="Register"/>
+                </p>
+            }
+        </div>
+    </td>
+</tr>
+</table>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
