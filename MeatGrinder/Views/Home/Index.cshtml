@@ -33,16 +33,14 @@
     <table class="table-center" style="margin-top: 20px" data-bind="with: toDoListData">
         <thead>
             <tr>
-                <th>Status</th>
                 <th>Task Name</th>
-                <th>Child Of Task</th>
-                <th>Parent Task</th>
+                <th>Complete</th>
             </tr>
         </thead>
-        <tbody data-bind="foreach: Tasks">
+        <tbody data-bind="foreach: $data">
             <tr>
-                <td><input type="checkbox" /></td>
                 <td data-bind="text: Description"></td>
+                <td><a class="btn" data-bind="click: $root.completeTask">Complete</a></td>
             </tr>
         </tbody>
     </table>
@@ -202,7 +200,7 @@
         self.getToDoList = function () {
             self.resetNavigationFlags();
             self.selectedSection('todo');
-            $.getJSON('/home/ToDoList', self.toDoListData);
+            $.getJSON('/ToDo/GetList', self.toDoListData);
         };
         self.getGoals = function () {
             self.resetNavigationFlags();
@@ -225,6 +223,19 @@
         };
 
         self.getGoals();
+
+        // ToDo Behaviors
+        self.completeTask = function (task) {
+            $.ajax({
+                type: "POST",
+                url: '/todo/Complete',
+                data: ko.toJSON(task), //{ ID: task.ID, Description: task.Description, TaskType: task.TaskType },
+                contentType: 'application/json',
+                success: function () {
+                    self.getToDoList();
+                },
+            });
+        };
         
         // Goal Behaviors
         self.selectGoal = function (goal) {

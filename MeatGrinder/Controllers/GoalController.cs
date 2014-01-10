@@ -28,6 +28,7 @@ namespace MeatGrinder.Controllers
             if (ModelState.IsValid)
             {
                 goal.UserID = CookieService.GetUserID();
+                goal.IsComplete = false;
                 _db.Goals.Add(goal);
                 _db.SaveChanges();
             }

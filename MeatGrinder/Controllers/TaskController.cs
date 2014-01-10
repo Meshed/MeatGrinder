@@ -42,6 +42,7 @@ namespace MeatGrinder.Controllers
             if (ModelState.IsValid)
             {
                 task.UserID = CookieService.GetUserID();
+                task.IsComplete = false;
                 _db.Tasks.Add(task);
                 _db.SaveChanges();
             }

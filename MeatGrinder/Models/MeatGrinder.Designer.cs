@@ -1,4 +1,4 @@
-﻿// Default code generation is disabled for model 'D:\workspace\MeatGrinder\Models\MeatGrinder.edmx'. 
+﻿// Default code generation is disabled for model 'D:\workspace\MeatGrinder\MeatGrinder\Models\MeatGrinder.edmx'. 
 // To enable default code generation, change the value of the 'Code Generation Strategy' designer
 // property to an alternate value. This property is available in the Properties Window when the model is
 // open in the designer.

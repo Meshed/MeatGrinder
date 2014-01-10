@@ -17,6 +17,7 @@
           <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="200" />
           <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="IsComplete" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -27,6 +28,7 @@
           <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="200" />
           <Property Name="ParentTaskID" Type="int" />
           <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="IsComplete" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -37,6 +39,9 @@
           <Property Name="EmailAddress" Type="nvarchar" Nullable="false" MaxLength="100" />
           <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="32" />
         </EntityType>
+        <Function Name="TodoList_GetAllForUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="int" Mode="In" />
+        </Function>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
@@ -45,6 +50,9 @@
           <EntitySet Name="Goals" EntityType="MeatGrinderModel.Goal" />
           <EntitySet Name="Tasks" EntityType="MeatGrinderModel.Task" />
           <EntitySet Name="Users" EntityType="MeatGrinderModel.User" />
+          <FunctionImport Name="TodoList_GetAllForUser" ReturnType="Collection(MeatGrinderModel.TodoList_GetAllForUser_Result)">
+          <Parameter Name="UserID" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="Goal">
           <Key>
@@ -53,6 +61,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="Description" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
           <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Boolean" Name="IsComplete" Nullable="false" />
         </EntityType>
         <EntityType Name="Task">
           <Key>
@@ -63,6 +72,7 @@
           <Property Name="Description" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
           <Property Name="ParentTaskID" Type="Int32" />
           <Property Type="Int32" Name="UserID" Nullable="false" />
+          <Property Type="Boolean" Name="IsComplete" Nullable="false" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -73,6 +83,11 @@
           <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
           <Property Name="Password" Type="String" Nullable="false" MaxLength="32" Unicode="true" FixedLength="false" />
         </EntityType>
+        <ComplexType Name="TodoList_GetAllForUser_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="TaskType" Nullable="false" MaxLength="4" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -82,6 +97,7 @@
           <EntitySetMapping Name="Goals">
             <EntityTypeMapping TypeName="MeatGrinderModel.Goal">
               <MappingFragment StoreEntitySet="Goal">
+                <ScalarProperty Name="IsComplete" ColumnName="IsComplete" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -91,6 +107,7 @@
           <EntitySetMapping Name="Tasks">
             <EntityTypeMapping TypeName="MeatGrinderModel.Task">
               <MappingFragment StoreEntitySet="Task">
+                <ScalarProperty Name="IsComplete" ColumnName="IsComplete" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="GoalID" ColumnName="GoalID" />
@@ -109,6 +126,15 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="TodoList_GetAllForUser" FunctionName="MeatGrinderModel.Store.TodoList_GetAllForUser">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="MeatGrinderModel.TodoList_GetAllForUser_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="TaskType" ColumnName="TaskType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

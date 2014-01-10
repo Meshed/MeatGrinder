@@ -12,6 +12,9 @@ namespace MeatGrinder.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Objects;
+    using System.Data.Objects.DataClasses;
+    using System.Linq;
     
     public partial class MeatGrinderEntities : DbContext
     {
@@ -28,5 +31,14 @@ namespace MeatGrinder.Models
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Task> Tasks { get; set; }
         public DbSet<User> Users { get; set; }
+    
+        public virtual ObjectResult<TodoList_GetAllForUser_Result> TodoList_GetAllForUser(Nullable<int> userID)
+        {
+            var userIDParameter = userID.HasValue ?
+                new ObjectParameter("UserID", userID) :
+                new ObjectParameter("UserID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TodoList_GetAllForUser_Result>("TodoList_GetAllForUser", userIDParameter);
+        }
     }
 }

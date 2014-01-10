@@ -12,6 +12,7 @@
     <Property Name="ID" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="200" />
     <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="IsComplete" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="Task">
     <Key>
@@ -22,6 +23,7 @@
     <Property Name="Description" Type="nvarchar" Nullable="false" MaxLength="200" />
     <Property Name="ParentTaskID" Type="int" />
     <Property Name="UserID" Type="int" Nullable="false" />
+    <Property Name="IsComplete" Type="bit" Nullable="false" />
   </EntityType>
   <EntityType Name="User">
     <Key>
@@ -32,4 +34,7 @@
     <Property Name="EmailAddress" Type="nvarchar" Nullable="false" MaxLength="100" />
     <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="32" />
   </EntityType>
+  <Function Name="TodoList_GetAllForUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="UserID" Type="int" Mode="In" />
+  </Function>
 </Schema>

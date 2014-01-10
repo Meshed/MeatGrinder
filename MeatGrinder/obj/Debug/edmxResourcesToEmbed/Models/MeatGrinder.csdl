@@ -4,6 +4,9 @@
     <EntitySet Name="Goals" EntityType="MeatGrinderModel.Goal" />
     <EntitySet Name="Tasks" EntityType="MeatGrinderModel.Task" />
     <EntitySet Name="Users" EntityType="MeatGrinderModel.User" />
+    <FunctionImport Name="TodoList_GetAllForUser" ReturnType="Collection(MeatGrinderModel.TodoList_GetAllForUser_Result)">
+      <Parameter Name="UserID" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="Goal">
     <Key>
@@ -12,6 +15,7 @@
     <Property Name="ID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
     <Property Name="Description" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
     <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="Boolean" Name="IsComplete" Nullable="false" />
   </EntityType>
   <EntityType Name="Task">
     <Key>
@@ -22,6 +26,7 @@
     <Property Name="Description" Type="String" Nullable="false" MaxLength="200" Unicode="true" FixedLength="false" />
     <Property Name="ParentTaskID" Type="Int32" />
     <Property Type="Int32" Name="UserID" Nullable="false" />
+    <Property Type="Boolean" Name="IsComplete" Nullable="false" />
   </EntityType>
   <EntityType Name="User">
     <Key>
@@ -32,4 +37,9 @@
     <Property Name="EmailAddress" Type="String" Nullable="false" MaxLength="100" Unicode="true" FixedLength="false" />
     <Property Name="Password" Type="String" Nullable="false" MaxLength="32" Unicode="true" FixedLength="false" />
   </EntityType>
+  <ComplexType Name="TodoList_GetAllForUser_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Description" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="TaskType" Nullable="false" MaxLength="4" />
+  </ComplexType>
 </Schema>
