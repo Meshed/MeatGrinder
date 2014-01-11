@@ -2,35 +2,25 @@
     ViewBag.Title = "Meat Grinder";
 }
 
-<table class="center table-center">
-    <tr>
-        <td>
-            <img src="~/Images/MeatGrinder_Logo_Small.png" width="149" height="113" />
-        </td>
-        <td>
-            <table>
-                <tr>
-                    <td><h1>Welcome To Meat Grinder</h1></td>
-                </tr>
-                <tr>
-                    <td><h3>Don't just plan goals, complete them!</h3></td>
-                </tr>            
-            </table>
-        </td>
-    </tr>
-</table>
+<div style="float: left; margin-top: 5px;">
+    <img src="~/Images/MeatGrinder_Logo_Small.png" width="149" height="113" />
+</div>
+<div class="center">
+    <h1>Welcome To Meat Grinder</h1>
+    <h3>Don't just plan goals, complete them!</h3>
+</div>
 
 <!-- Sections -->
-<div class="center">
-    <li class="btn" data-bind="click: $root.getToDoList">To Do List</li>
-    <a class="btn" data-bind="click: $root.getGoals">Goals</a>
+<div class="center" style="margin-top: 40px">
+    <li class="btn" data-bind="click: $root.getToDoList"><span class="icon-ok"></span> To Do List</li>
+    <a class="btn" data-bind="click: $root.getGoals"><span class="icon-list"></span> Goals</a>
     <!--<li class="btn" data-bind="click: $root.goToAccountSection">Account</li>-->
-    <a class="btn" href="/home/logoff">Logoff</a>
+    <a class="btn" href="/home/logoff"><span class="icon-off"></span> Logoff</a>
 </div>
 
 <!-- To Do Grid -->
-<div class="center">
-    <table class="table-center" style="margin-top: 20px" data-bind="with: toDoListData">
+<div data-bind="with: toDoListData">
+    <table id="todoList" class="table table-striped" style="margin-top: 20px">
         <thead>
             <tr>
                 <th>Task Name</th>
@@ -40,7 +30,11 @@
         <tbody data-bind="foreach: $data">
             <tr>
                 <td data-bind="text: Description"></td>
-                <td><a class="btn" data-bind="click: $root.completeTask">Complete</a></td>
+                <td>
+                    <button class="btn" data-bind="click: $root.completeTask">
+                        <span class="icon-ok"></span>
+                    </button>
+                </td>
             </tr>
         </tbody>
     </table>
@@ -48,61 +42,87 @@
 
 <!-- Goal/Task List -->
 <div data-bind="visible: selectedSection() == 'goals'">
-    <!-- Breadcrumb -->
-    <ul class="breadcrumb">
-        <li><a data-bind="click: $root.getGoals">Home</a></li>
-        <!-- ko foreach: $root.breadCrumb -->
-        <span class="divider">/</span> <li data-bind="text: name"></li>
-        <!-- /ko -->
-    </ul>
+    
     <!-- Goals -->
     <div data-bind="with: $root.goalData">
+        <div class="center section-header">
+            <h1>Goals</h1>
+        </div>
+
         <table class="center table-center" style="margin-top: 20px">
             <tr>
-                <td class="section-header">Add A New Goal</td>
-            </tr>
-            <tr>
-                <td><input type="text" data-bind="value: $root.newGoalDescription"/></td>
+                <td colspan="2" class="section-header">Add A New Goal</td>
             </tr>
             <tr>
                 <td>
-                    <a class="btn" data-bind="click: $root.addGoal">Add</a>
+                    <input type="text" data-bind="value: $root.newGoalDescription"/>
+                </td>
+                <td>
+                    <a style="margin-bottom: 10px" class="btn" data-bind="click: $root.addGoal">Add</a>
                 </td>
             </tr>
         </table>
+
+        <!-- Breadcrumb -->
+        <ul class="breadcrumb" style="margin-top: 10px; margin-bottom: 0px;">
+            <li><a data-bind="click: $root.getGoals"><span class="icon-home"></span> Home</a></li>
+            <!-- ko foreach: $root.breadCrumb -->
+            <span class="divider">/</span> <li data-bind="text: name"></li>
+            <!-- /ko -->
+        </ul>
         
-        <div class="center section-header" style="margin-top: 20px">
-            Goals
-        </div>
-        <table class="table-center" data-bind="foreach: Goals">
-            <tr>
-                <td data-bind="click: $root.selectGoal"><ul><li data-bind="text: Description"></li></ul></td>
-            </tr>
+        <table id="goalsTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-left">Description</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: Goals">
+                <tr>
+                    <td data-bind="click: $root.selectGoal, text: Description"></td>
+                </tr>
+            </tbody>
         </table>
     </div>
     <!-- Tasks -->
     <div data-bind="with: $root.taskData">
+        <div class="center section-header">
+            <h1>Tasks</h1>
+        </div>
+
         <table class="center table-center" style="margin-top: 20px">
             <tr>
-                <td class="section-header">Add A New Task</td>
-            </tr>
-            <tr>
-                <td><input type="text" data-bind="value: $root.newTaskDescription"/></td>
+                <td colspan="2" class="section-header">Add A New Task</td>
             </tr>
             <tr>
                 <td>
-                    <a class="btn" data-bind="click: $root.addTask">Add</a>
+                    <input type="text" data-bind="value: $root.newTaskDescription"/>
+                </td>
+                <td>
+                    <a style="margin-bottom: 10px" class="btn" data-bind="click: $root.addTask">Add</a>
                 </td>
             </tr>
         </table>
         
-        <div class="center section-header" style="margin-top: 20px">
-            Tasks
-        </div>
-        <table class="table-center" data-bind="foreach: Tasks">
-            <tr>
-                <td data-bind="click: $root.selectTask"><ul><li data-bind="text: Description"></li></ul></td>
-            </tr>
+        <!-- Breadcrumb -->
+        <ul class="breadcrumb" style="margin-top: 10px; margin-bottom: 0px;">
+            <li><a data-bind="click: $root.getGoals"><span class="icon-home"></span> Home</a></li>
+            <!-- ko foreach: $root.breadCrumb -->
+            <span class="divider">/</span> <li data-bind="text: name"></li>
+            <!-- /ko -->
+        </ul>
+
+        <table id="tasksTable" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: Tasks">
+                <tr>
+                    <td data-bind="click: $root.selectTask, text: Description"></td>
+                </tr>                
+            </tbody>
         </table>
     </div>
 </div>
