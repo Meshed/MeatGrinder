@@ -1,10 +1,12 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
+using MeatGrinder.Helpers;
 using MeatGrinder.Models;
 using MeatGrinder.Services;
 
 namespace MeatGrinder.Controllers
 {
+    [CustomAuthorize]
     public class TaskController : Controller
     {
         private readonly MeatGrinderEntities _db = new MeatGrinderEntities();
