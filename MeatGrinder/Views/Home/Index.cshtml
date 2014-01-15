@@ -218,7 +218,17 @@
 
         // Navigation Behaviors
         self.getToDoList = function () { location.hash = "#todo"; };
+        self.refreshToDoList = function() {
+            self.resetNavigationFlags();
+            self.selectedSection('todo');
+            $.getJSON('ToDo/GetList', self.toDoListData);
+        };
         self.getGoals = function () { location.hash = "#goals"; };
+        self.refreshGoals = function() {
+            self.resetNavigationFlags();
+            self.selectedSection('goals');
+            $.getJSON('/goal/getall', self.goalData);
+        };
 
         self.goToAccountSection = function () {
             self.resetNavigationFlags();
@@ -246,7 +256,7 @@
                 data: ko.toJSON(task), //{ ID: task.ID, Description: task.Description, TaskType: task.TaskType },
                 contentType: 'application/json',
                 success: function () {
-                    self.getToDoList();
+                    self.refreshToDoList();
                 },
             });
         };
@@ -260,7 +270,7 @@
                 contentType: 'application/json',
                 success: function () {
                     self.newGoalDescription(null);
-                    self.getGoals();
+                    self.refreshGoals();
                 },
             });
         };
@@ -298,12 +308,12 @@
             if (self.selectedTask() == null) {
                 parentTaskID = null;
             } else {
-                parentTaskID = self.selectedTask().ID;
+                parentTaskID = self.selectedTask();
             }
 
             $.ajax({
                 url: '/task/create',
-                data: { Description: self.newTaskDescription(), GoalID: self.selectedGoal().ID, ParentTaskID: parentTaskID },
+                data: { Description: self.newTaskDescription(), GoalID: self.selectedGoal(), ParentTaskID: parentTaskID },
                 contentType: 'application/json',
                 success: function() {
                     self.newTaskDescription(null);
@@ -311,7 +321,7 @@
                     if (self.selectedTask() == null) {
                         self.getTasksForGoal();
                     } else {
-                        self.getTasksForTask();
+                        self.getTasksForTask(self.selectedTask());
                     }
                     // Otherwise, get selected tasks for goal
                 }
@@ -325,25 +335,23 @@
 
         // Client-side routes
         Sammy(function () {
-            this.get('#todo', function() {
-                self.resetNavigationFlags();
-                self.selectedSection('todo');
-                $.getJSON('ToDo/GetList', self.toDoListData);
+            this.get('#todo', function () {
+                self.refreshToDoList();
             });
 
-            this.get('#goals', function() {
-                self.resetNavigationFlags();
-                self.selectedSection('goals');
-                $.getJSON('/goal/getall', self.goalData);
+            this.get('#goals', function () {
+                self.refreshGoals();
             });
 
             this.get('#goal/:goal', function () {
-                self.resetNavigationFlags();
+                self.selectedGoal(this.params.goal);
+                self.goalData(null);
                 self.getTasksForGoal(this.params.goal);
             });
 
             this.get('#task/:task', function () {
-                self.resetNavigationFlags();
+                self.selectedTask(this.params.task);
+                self.taskData(null);
                 self.getTasksForTask(this.params.task);
             });
         }).run();
