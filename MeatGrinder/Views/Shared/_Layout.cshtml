@@ -5,18 +5,18 @@
         <meta name="viewport" content="width=device-width" />
         <title>@ViewBag.Title</title>
         @Styles.Render("~/Content/css")
-        @Styles.Render("~/Content/themes/bootstrap/css")
+        <link rel="stylesheet" type="text/css" href="~/Content/themes/bootstrap/css/bootstrap.css"/>
         @Scripts.Render("~/bundles/modernizr")
         @Scripts.Render("~/bundles/jquery")
         @Scripts.Render("~/bundles/jqueryui")
         @Scripts.Render("~/bundles/knockout")
+        @Scripts.Render("~/bundles/bootstrap")
     </head>
     <body>
         <div class="container">
             @RenderBody()
         </div>
 
-        @Scripts.Render("~/bundles/bootstrap")
         @RenderSection("scripts", required: false)
     </body>
 </html>

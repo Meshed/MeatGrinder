@@ -19,7 +19,7 @@ namespace MeatGrinder
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                        "~/Content/themes/bootstrap/js/bootstrap.min.js"));
+                        "~/Scripts/bootstrap.min.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/knockout").Include(
                         "~/Scripts/knockout-2.3.0.js",
@@ -46,9 +46,6 @@ namespace MeatGrinder
                         "~/Content/themes/base/jquery.ui.datepicker.css",
                         "~/Content/themes/base/jquery.ui.progressbar.css",
                         "~/Content/themes/base/jquery.ui.theme.css"));
-
-            bundles.Add(new StyleBundle("~/Content/themes/bootstrap/css").Include(
-                        "~/Content/themes/bootstrap/css/bootstrap.css"));
         }
     }
 }
