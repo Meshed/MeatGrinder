@@ -20,7 +20,7 @@
     </tr>
     <tr>
         <td>
-        <div class="center" style="margin-top: 20px;">
+        <div class="center" style="margin-top: 20px;" data-bind="visible: isLoginVisible()">
             @using (Html.BeginForm()) {
                 @Html.AntiForgeryToken()
                 @Html.ValidationSummary(true)
@@ -48,12 +48,13 @@
                 </table>
                 <p style="margin-top: 20px;">
                     <input type="submit" value="Login" />
+                    <a class="btn" data-bind="click: $root.switchToRegister">Register</a>
                 </p>
             }
         </div>        
     </td>
         <td>        
-        <div class="center" style="margin-top: 20px;">
+        <div class="center" style="margin-top: 20px;" data-bind="visible: isLoginVisible() == false">
             @using (Html.BeginForm("Register", "Home"))
             {
                 <table class="table-center">
@@ -85,12 +86,30 @@
                 </table>
                 <p style="margin-top: 20px;">
                     <input type="submit" value="Register"/>
+                    <button data-bind="click: $root.switchToLogin">Login</button>
                 </p>
             }
         </div>
     </td>
 </tr>
 </table>
+
+<script type="text/javascript">
+    function LoginViewModel() {
+        var self = this;
+
+        self.isLoginVisible = ko.observable(true);
+
+        self.switchToRegister = function () {
+            self.isLoginVisible(false);
+        };
+        self.switchToLogin = function () {
+            self.isLoginVisible(true);
+        };
+    };
+
+    ko.applyBindings(new LoginViewModel());
+</script>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
