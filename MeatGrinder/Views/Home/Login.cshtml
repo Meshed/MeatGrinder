@@ -9,97 +9,94 @@
     <h3>Don't just plan goals, complete them!</h3>    
 </div>
 
-<table>
-    <tr>
-        <td>
-            <h2 class="center">Login</h2>
-        </td>
-        <td>
-            <h2 class="center">Register</h2>            
-        </td>
-    </tr>
-    <tr>
-        <td>
-        <div class="center" style="margin-top: 20px;" data-bind="visible: isLoginVisible()">
-            @using (Html.BeginForm()) {
-                @Html.AntiForgeryToken()
-                @Html.ValidationSummary(true)
-
-                <table class="table-center">
-                    <tr>
-                        <td>
-                            @Html.LabelFor(model => model.EmailAddress, "Email")
-                        </td>
-                        <td>
-                            @Html.EditorFor(model => model.EmailAddress)
-                            @Html.ValidationMessageFor(model => model.EmailAddress)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.LabelFor(model => model.Password)
-                        </td>
-                        <td>
-                            @Html.PasswordFor(model => model.Password)
-                            @Html.ValidationMessageFor(model => model.Password)
-                        </td>
-                    </tr>
-                    <tr><td></td><td></td></tr>
-                </table>
-                <p style="margin-top: 20px;">
-                    <input type="submit" value="Login" />
-                    <a class="btn" data-bind="click: $root.switchToRegister">Register</a>
-                </p>
-            }
-        </div>        
-    </td>
-        <td>        
-        <div class="center" style="margin-top: 20px;" data-bind="visible: isLoginVisible() == false">
-            @using (Html.BeginForm("Register", "Home"))
-            {
-                <table class="table-center">
-                    <tr>
-                        <td>
-                            @Html.LabelFor(model => model.AccountName)
-                        </td>
-                        <td>
-                            @Html.EditorFor(model => model.AccountName)
-                            @Html.ValidationMessageFor(model => model.AccountName)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.LabelFor(model => model.EmailAddress)
-                        </td>
-                        <td>
-                            @Html.EditorFor(model => model.EmailAddress)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            @Html.LabelFor(model => model.Password)
-                        </td>
-                        <td>
-                            @Html.PasswordFor(model => model.Password)
-                        </td>
-                    </tr>
-                </table>
-                <p style="margin-top: 20px;">
-                    <input type="submit" value="Register"/>
-                    <button data-bind="click: $root.switchToLogin">Login</button>
-                </p>
-            }
-        </div>
-    </td>
-</tr>
-</table>
+<!-- Login -->
+<div class="center" style="margin-top: 20px;" data-bind="visible: isLoginVisible()">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div>Login</div>
+        <table class="table-center">
+            <tr>
+                <td class="text-left">
+                    @Html.LabelFor(model => model.EmailAddress, "Email Address")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.EmailAddress)
+                    @Html.ValidationMessageFor(model => model.EmailAddress)
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">
+                    @Html.LabelFor(model => model.Password)
+                </td>
+                <td>
+                    @Html.PasswordFor(model => model.Password)
+                    @Html.ValidationMessageFor(model => model.Password)
+                </td>
+            </tr>
+        </table>
+        <p style="margin-top: 20px;">
+            <input class="btn btn-primary" type="submit" value="Login" />
+            <button class="btn" data-bind="click: $root.switchToRegister">Register</button>
+        </p>
+    }
+</div>
+<!-- Register -->
+<div class="center" style="margin-top: 20px;" data-bind="visible: isLoginVisible() == false">
+    @using (Html.BeginForm("Register", "Home"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div>Register</div>
+        <table class="table-center">
+            <tr>
+                <td class="text-left">
+                    @Html.LabelFor(model => model.AccountName, "Account Name")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.AccountName)
+                    @Html.ValidationMessageFor(model => model.AccountName)
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">
+                    @Html.LabelFor(model => model.EmailAddress, "Email Address")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.EmailAddress)
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">
+                    @Html.LabelFor(model => model.Password)
+                </td>
+                <td>
+                    @Html.PasswordFor(model => model.Password)
+                </td>
+            </tr>
+        </table>
+        
+        <p>
+            <input type="checkbox" class="checkbox" style="margin-bottom: 4px;" data-bind="checked: userAgrees" /> I agree
+        </p>
+        
+        <p style="margin-top: 20px;">
+            <input class="btn btn-primary" type="submit" value="Register" data-bind="enable: $root.userAgrees()"/>
+            <button class="btn" data-bind="click: $root.switchToLogin">Login</button>
+        </p>
+    }
+</div>
 
 <script type="text/javascript">
     function LoginViewModel() {
         var self = this;
 
+        // Variables
         self.isLoginVisible = ko.observable(true);
+        self.userAgrees = ko.observable(false);
 
+        // Behaviors
         self.switchToRegister = function () {
             self.isLoginVisible(false);
         };
