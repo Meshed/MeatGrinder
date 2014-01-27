@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -129,11 +130,14 @@ namespace MeatGrinder.Controllers
                 {
                     AccountName = viewModel.AccountName,
                     EmailAddress = viewModel.EmailAddress,
-                    Password = GetHash(viewModel.Password)
+                    Password = GetHash(viewModel.Password),
+                    DateCreated = DateTime.Now
                 };
 
                 db.Users.Add(user);
                 db.SaveChanges();
+                CookieService.SetCookie(Response, "UserID", 1, user.ID.ToString(CultureInfo.InvariantCulture));
+                return RedirectToAction("Index");
             }
 
             return View("Login", viewModel);

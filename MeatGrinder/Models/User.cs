@@ -18,5 +18,6 @@ namespace MeatGrinder.Models
         public string AccountName { get; set; }
         public string EmailAddress { get; set; }
         public string Password { get; set; }
+        public Nullable<System.DateTime> DateCreated { get; set; }
     }
 }
