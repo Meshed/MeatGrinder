@@ -107,8 +107,8 @@
         <!-- Breadcrumb -->
         <ul class="breadcrumb" style="margin-top: 10px; margin-bottom: 0px;">
             <li><a data-bind="click: $root.getGoals"><span class="icon-home"></span> Home</a></li>
-            <!-- ko foreach: $root.breadCrumb -->
-            <span class="divider">/</span> <li data-bind="text: name"></li>
+            <!-- ko foreach: $root.taskData().BreadCrumbs -->
+            <span class="divider">/</span> <li data-bind="text: DisplayName"></li>
             <!-- /ko -->
         </ul>
 

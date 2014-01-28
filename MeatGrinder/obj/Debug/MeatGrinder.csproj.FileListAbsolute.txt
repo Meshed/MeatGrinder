@@ -28,7 +28,6 @@ D:\workspace\MeatGrinder\bin\System.Web.WebPages.Razor.xml
 D:\workspace\MeatGrinder\obj\Debug\MeatGrinder.dll
 D:\workspace\MeatGrinder\obj\Debug\MeatGrinder.pdb
 D:\workspace\MeatGrinder\obj\Debug\MeatGrinder.csprojResolveAssemblyReference.cache
-D:\workspace\MeatGrinder\MeatGrinder\bin\MeatGrinder.dll.config
 D:\workspace\MeatGrinder\MeatGrinder\bin\MeatGrinder.dll
 D:\workspace\MeatGrinder\MeatGrinder\bin\MeatGrinder.pdb
 D:\workspace\MeatGrinder\MeatGrinder\bin\Antlr3.Runtime.dll

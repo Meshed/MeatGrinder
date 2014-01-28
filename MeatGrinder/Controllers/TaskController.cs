@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using MeatGrinder.Helpers;
 using MeatGrinder.Models;
@@ -15,13 +16,17 @@ namespace MeatGrinder.Controllers
         public ActionResult GetTasksForGoal(Goal goal)
         {
             int userID = CookieService.GetUserID();
+            goal = _db.Goals.FirstOrDefault(m => m.ID == goal.ID);
 
-            var viewModel = new TaskViewModel
+            var viewModel = new TaskViewModel();
+
+            if (goal != null)
             {
-                Tasks = _db.Tasks.Where(m => m.GoalID == goal.ID && 
-                    m.ParentTaskID == null &&
-                    m.UserID == userID).ToList()
-            };
+                viewModel.Tasks = _db.Tasks.Where(m => m.GoalID == goal.ID &&
+                                                       m.ParentTaskID == null &&
+                                                       m.UserID == userID).ToList();
+                viewModel.BreadCrumbs = CreateBreadCrumbs(goal);
+            }
 
             return Json(viewModel);
         }
@@ -29,12 +34,15 @@ namespace MeatGrinder.Controllers
         public ActionResult GetTasksForTask(Task task)
         {
             var userID = CookieService.GetUserID();
+            task = _db.Tasks.FirstOrDefault(m => m.ID == task.ID);
 
-            var viewModel = new TaskViewModel
+            var viewModel = new TaskViewModel();
+            if (task != null)
             {
-                Tasks = _db.Tasks.Where(m => m.ParentTaskID == task.ID &&
-                    m.UserID == userID).ToList()
-            };
+                viewModel.Tasks = _db.Tasks.Where(m => m.ParentTaskID == task.ID &&
+                                                       m.UserID == userID).ToList();
+                viewModel.BreadCrumbs = CreateBreadCrumbs(task);
+            }
 
             return Json(viewModel);
         }
@@ -48,6 +56,48 @@ namespace MeatGrinder.Controllers
                 _db.Tasks.Add(task);
                 _db.SaveChanges();
             }
+        }
+
+        private List<BreadCrumbModel> CreateBreadCrumbs(Goal goal)
+        {
+            var breadCrumbs = new List<BreadCrumbModel>();
+
+            breadCrumbs.Add(CreateBreadCrumb(goal.Description, goal.ID, "goal"));
+
+            return breadCrumbs;
+        }
+        private List<BreadCrumbModel> CreateBreadCrumbs(Task task)
+        {
+            var breadcrumbs = new List<BreadCrumbModel>();
+
+            BuildBreadCrumbList(task, breadcrumbs);
+
+            return breadcrumbs;
+        }
+        private void BuildBreadCrumbList(Task task, List<BreadCrumbModel> breadCrumbs)
+        {
+            if (task.ParentTaskID != null)
+            {
+                Task newTask = _db.Tasks.FirstOrDefault(m => m.ID == task.ParentTaskID);
+                if (newTask != null) 
+                    BuildBreadCrumbList(newTask, breadCrumbs);
+            }
+            else
+            {
+                Goal goal = _db.Goals.FirstOrDefault(m => m.ID == task.GoalID);
+                if (goal != null) 
+                    breadCrumbs.Add(CreateBreadCrumb(goal.Description, goal.ID, "goal"));
+            }
+
+            breadCrumbs.Add(CreateBreadCrumb(task.Description, task.ID, "task"));
+        }
+        private BreadCrumbModel CreateBreadCrumb(string description, int id, string breadCrumbType)
+        {
+            var breadCrumb = new BreadCrumbModel();
+            breadCrumb.DisplayName = description;
+            breadCrumb.Url = "#" + breadCrumbType + "/" + id;
+
+            return breadCrumb;
         }
     }
 }
