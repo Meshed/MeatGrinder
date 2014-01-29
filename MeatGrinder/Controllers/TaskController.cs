@@ -1,30 +1,33 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Web.Mvc;
 using MeatGrinder.Helpers;
 using MeatGrinder.Models;
-using MeatGrinder.Services;
+using MeatGrinder.Repositories;
 
 namespace MeatGrinder.Controllers
 {
     [CustomAuthorize]
     public class TaskController : Controller
     {
-        private readonly MeatGrinderEntities _db = new MeatGrinderEntities();
+        private readonly GoalRepository _goalRepository;
+        private readonly TaskRepository _taskRepository;
+
+        public TaskController()
+        {
+            _goalRepository = new GoalRepository();
+            _taskRepository = new TaskRepository();
+        }
 
         [HttpPost]
         public ActionResult GetTasksForGoal(Goal goal)
         {
-            int userID = CookieService.GetUserID();
-            goal = _db.Goals.FirstOrDefault(m => m.ID == goal.ID);
+            goal = _goalRepository.GetByID(goal.ID);
 
             var viewModel = new TaskViewModel();
 
             if (goal != null)
             {
-                viewModel.Tasks = _db.Tasks.Where(m => m.GoalID == goal.ID &&
-                                                       m.ParentTaskID == null &&
-                                                       m.UserID == userID).ToList();
+                viewModel.Tasks = _taskRepository.GetAllByGoalID(goal.ID);
                 viewModel.BreadCrumbs = CreateBreadCrumbs(goal);
             }
 
@@ -33,14 +36,12 @@ namespace MeatGrinder.Controllers
         [HttpPost]
         public ActionResult GetTasksForTask(Task task)
         {
-            var userID = CookieService.GetUserID();
-            task = _db.Tasks.FirstOrDefault(m => m.ID == task.ID);
+            task = _taskRepository.GetByID(task.ID);
 
             var viewModel = new TaskViewModel();
             if (task != null)
             {
-                viewModel.Tasks = _db.Tasks.Where(m => m.ParentTaskID == task.ID &&
-                                                       m.UserID == userID).ToList();
+                viewModel.Tasks = _taskRepository.GetAllByTaskID(task.ID);
                 viewModel.BreadCrumbs = CreateBreadCrumbs(task);
             }
 
@@ -51,47 +52,16 @@ namespace MeatGrinder.Controllers
         {
             if (ModelState.IsValid)
             {
-                task.UserID = CookieService.GetUserID();
-                task.IsComplete = false;
-                _db.Tasks.Add(task);
-                _db.SaveChanges();
-
-                if (task.ParentTaskID != null)
-                {
-                    SetTaskNotComplete(task.ParentTaskID.Value);
-                }
-                else
-                {
-                    SetGoalNotComplete(task.GoalID);
-                }
+                _taskRepository.Create(task);
             }
         }
 
-        private void SetTaskNotComplete(int taskId)
-        {
-            var task = _db.Tasks.FirstOrDefault(m => m.ID == taskId);
-
-            if (task != null && task.IsComplete)
-            {
-                task.IsComplete = false;
-                _db.SaveChanges();
-            }
-        }
-        private void SetGoalNotComplete(int goalId)
-        {
-            var goal = _db.Goals.FirstOrDefault(m => m.ID == goalId);
-
-            if (goal != null && goal.IsComplete)
-            {
-                goal.IsComplete = false;
-                _db.SaveChanges();
-            }
-        }
         private List<BreadCrumbModel> CreateBreadCrumbs(Goal goal)
         {
-            var breadCrumbs = new List<BreadCrumbModel>();
-
-            breadCrumbs.Add(CreateBreadCrumb(goal.Description, goal.ID, "goal"));
+            var breadCrumbs = new List<BreadCrumbModel>
+            {
+                CreateBreadCrumb(goal.Description, goal.ID, "goal")
+            };
 
             return breadCrumbs;
         }
@@ -107,13 +77,13 @@ namespace MeatGrinder.Controllers
         {
             if (task.ParentTaskID != null)
             {
-                Task newTask = _db.Tasks.FirstOrDefault(m => m.ID == task.ParentTaskID);
+                Task newTask = _taskRepository.GetByID(task.ParentTaskID.Value);
                 if (newTask != null) 
                     BuildBreadCrumbList(newTask, breadCrumbs);
             }
             else
             {
-                Goal goal = _db.Goals.FirstOrDefault(m => m.ID == task.GoalID);
+                Goal goal = _goalRepository.GetByID(task.GoalID);
                 if (goal != null) 
                     breadCrumbs.Add(CreateBreadCrumb(goal.Description, goal.ID, "goal"));
             }
@@ -122,9 +92,11 @@ namespace MeatGrinder.Controllers
         }
         private BreadCrumbModel CreateBreadCrumb(string description, int id, string breadCrumbType)
         {
-            var breadCrumb = new BreadCrumbModel();
-            breadCrumb.DisplayName = description;
-            breadCrumb.Url = "#" + breadCrumbType + "/" + id;
+            var breadCrumb = new BreadCrumbModel
+            {
+                DisplayName = description, 
+                Url = "#" + breadCrumbType + "/" + id
+            };
 
             return breadCrumb;
         }
