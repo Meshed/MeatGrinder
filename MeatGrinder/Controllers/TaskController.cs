@@ -55,9 +55,38 @@ namespace MeatGrinder.Controllers
                 task.IsComplete = false;
                 _db.Tasks.Add(task);
                 _db.SaveChanges();
+
+                if (task.ParentTaskID != null)
+                {
+                    SetTaskNotComplete(task.ParentTaskID.Value);
+                }
+                else
+                {
+                    SetGoalNotComplete(task.GoalID);
+                }
             }
         }
 
+        private void SetTaskNotComplete(int taskId)
+        {
+            var task = _db.Tasks.FirstOrDefault(m => m.ID == taskId);
+
+            if (task != null && task.IsComplete)
+            {
+                task.IsComplete = false;
+                _db.SaveChanges();
+            }
+        }
+        private void SetGoalNotComplete(int goalId)
+        {
+            var goal = _db.Goals.FirstOrDefault(m => m.ID == goalId);
+
+            if (goal != null && goal.IsComplete)
+            {
+                goal.IsComplete = false;
+                _db.SaveChanges();
+            }
+        }
         private List<BreadCrumbModel> CreateBreadCrumbs(Goal goal)
         {
             var breadCrumbs = new List<BreadCrumbModel>();

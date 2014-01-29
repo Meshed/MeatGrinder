@@ -256,8 +256,6 @@
       <DependentUpon>MeatGrinder.edmx</DependentUpon>
       <LastGenOutput>MeatGrinder.cs</LastGenOutput>
     </Content>
-    <None Include="Properties\PublishProfiles\meatgrinder - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\meatgrinder - Web Deploy.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
     <Content Include="Scripts\jquery-2.0.3.min.js" />
@@ -298,6 +296,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\themes\bootstrap\js\" />
+    <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Repositories\" />
   </ItemGroup>
   <ItemGroup>
