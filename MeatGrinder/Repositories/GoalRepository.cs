@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using MeatGrinder.Models;
+using MeatGrinder.Services;
 
 namespace MeatGrinder.Repositories
 {
@@ -20,6 +22,18 @@ namespace MeatGrinder.Repositories
                 goal.IsComplete = false;
                 _db.SaveChanges();
             }
+        }
+        public List<Goal> GetAllForUser()
+        {
+            int userID = CookieService.GetUserID();
+            return _db.Goals.Where(m => m.UserID == userID).ToList();
+        }
+        public void Create(Goal goal)
+        {
+            goal.UserID = CookieService.GetUserID();
+            goal.IsComplete = false;
+            _db.Goals.Add(goal);
+            _db.SaveChanges();
         }
     }
 }

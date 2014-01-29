@@ -1,36 +1,35 @@
-﻿using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using MeatGrinder.Helpers;
 using MeatGrinder.Models;
-using MeatGrinder.Services;
+using MeatGrinder.Repositories;
 
 namespace MeatGrinder.Controllers
 {
+    [CustomAuthorize]
     public class GoalController : Controller
     {
-        private readonly MeatGrinderEntities _db = new MeatGrinderEntities();
+        private readonly GoalRepository _goalRepository;
 
-        [CustomAuthorize]
+        public GoalController()
+        {
+            _goalRepository = new GoalRepository();
+        }
+
         public ActionResult GetAll()
         {
-            int userID = CookieService.GetUserID();
             var viewModel = new GoalViewModel
             {
-                Goals = _db.Goals.Where(m => m.UserID == userID).ToList()
+                Goals = _goalRepository.GetAllForUser()
             };
 
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
-        [CustomAuthorize]
         public void Create(Goal goal)
         {
             if (ModelState.IsValid)
             {
-                goal.UserID = CookieService.GetUserID();
-                goal.IsComplete = false;
-                _db.Goals.Add(goal);
-                _db.SaveChanges();
+                _goalRepository.Create(goal);
             }
         }
     }
