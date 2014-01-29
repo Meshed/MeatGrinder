@@ -256,9 +256,7 @@
       <DependentUpon>MeatGrinder.edmx</DependentUpon>
       <LastGenOutput>MeatGrinder.cs</LastGenOutput>
     </Content>
-    <None Include="Properties\PublishProfiles\meatgrinder - FTP %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\meatgrinder - FTP.pubxml" />
-    <None Include="Properties\PublishProfiles\meatgrinder - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\meatgrinder - Web Deploy.pubxml" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-2.0.3.js" />
