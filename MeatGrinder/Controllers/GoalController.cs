@@ -32,5 +32,10 @@ namespace MeatGrinder.Controllers
                 _goalRepository.Create(goal);
             }
         }
+
+        public void Delete(Goal goal)
+        {
+            _goalRepository.Delete(goal);
+        }
     }
 }
