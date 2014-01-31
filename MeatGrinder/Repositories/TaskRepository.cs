@@ -54,5 +54,26 @@ namespace MeatGrinder.Repositories
                 _db.SaveChanges();
             }
         }
+        public void Delete(Task task)
+        {
+            task = _db.Tasks.FirstOrDefault(m => m.ID == task.ID);
+
+            if (task != null) 
+                DeleteTask(task);
+
+            _db.SaveChanges();
+        }
+
+        private void DeleteTask(Task task)
+        {
+            var childTasks = _db.Tasks.Where(m => m.ParentTaskID == task.ID);
+
+            foreach (var childTask in childTasks)
+            {
+                DeleteTask(childTask);
+            }
+
+            _db.Tasks.Remove(task);
+        }
     }
 }

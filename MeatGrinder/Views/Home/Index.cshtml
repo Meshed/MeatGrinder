@@ -116,12 +116,14 @@
             <thead>
                 <tr>
                     <th>Description</th>
+                    <th style="width: 20px;">Delete</th>
                 </tr>
             </thead>
             <tbody data-bind="foreach: Tasks">
                 <tr>
                     <td data-bind="click: $root.selectTask, text: Description"></td>
-                </tr>                
+                    <td><a class="btn" data-bind="click: $root.deleteTask" alt="Delete Task"><i class="icon-minus-sign"></i></a></td>
+                </tr>
             </tbody>
         </table>
     </div>
@@ -219,8 +221,6 @@
         // Navigation Behaviors
         self.getToDoList = function () { location.hash = "#todo"; };
         self.refreshToDoList = function() {
-            self.resetNavigationFlags();
-            self.selectedSection('todo');
             $.getJSON('ToDo/GetList', self.toDoListData);
         };
         self.getGoals = function () { location.hash = "#goals"; };
@@ -324,6 +324,24 @@
                         self.getTasksForTask(self.selectedTask());
                     }
                     // Otherwise, get selected tasks for goal
+                }
+            });
+        };
+        self.deleteTask = function(task) {
+            $.ajax({
+                url: '/task/delete',
+                data: { ID: task.ID },
+                contentType: 'application/json',
+                success: function () {
+                    alert(task.ParentTaskID);
+
+                    if (task.ParentTaskID != null) {
+                        alert('Get tasks for task');
+                        self.getTasksForTask(task.ParentTaskID);
+                    } else {
+                        alert('Get tasks for goal');
+                        self.getTasksForGoal(task.GoalID);
+                    }
                 }
             });
         };

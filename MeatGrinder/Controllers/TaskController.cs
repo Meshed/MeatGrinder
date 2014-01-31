@@ -55,6 +55,11 @@ namespace MeatGrinder.Controllers
                 _taskRepository.Create(task);
             }
         }
+        public void Delete(Task task)
+        {
+            if (task != null) 
+                _taskRepository.Delete(task);
+        }
 
         private List<BreadCrumbModel> CreateBreadCrumbs(Goal goal)
         {
