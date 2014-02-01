@@ -285,14 +285,18 @@
             });
         };
         self.deleteGoal = function (goal) {
-            $.ajax({
-                url: '/goal/delete',
-                data: { ID: goal.ID },
-                contentType: 'application/json',
-                success: function () {
-                    self.refreshGoals();
-                }
-            });
+            var response = confirm("Are you sure you want to delete the goal: " + goal.Description + "?");
+
+            if (response == true) {
+                $.ajax({
+                    url: '/goal/delete',
+                    data: { ID: goal.ID },
+                    contentType: 'application/json',
+                    success: function () {
+                        self.refreshGoals();
+                    }
+                });
+            }
         };
         
         // Task Behaviors
@@ -347,19 +351,23 @@
                 }
             });
         };
-        self.deleteTask = function(task) {
-            $.ajax({
-                url: '/task/delete',
-                data: { ID: task.ID },
-                contentType: 'application/json',
-                success: function () {
-                    if (task.ParentTaskID != null) {
-                        self.getTasksForTask(task.ParentTaskID);
-                    } else {
-                        self.getTasksForGoal(task.GoalID);
+        self.deleteTask = function (task) {
+            var response = confirm("Are you sure you want to delete the task: " + task.Description + "?");
+
+            if (response == true){
+                $.ajax({
+                    url: '/task/delete',
+                    data: { ID: task.ID },
+                    contentType: 'application/json',
+                    success: function () {
+                        if (task.ParentTaskID != null) {
+                            self.getTasksForTask(task.ParentTaskID);
+                        } else {
+                            self.getTasksForGoal(task.GoalID);
+                        }
                     }
-                }
-            });
+                });
+            }
         };
 
         // Account Behaviors
