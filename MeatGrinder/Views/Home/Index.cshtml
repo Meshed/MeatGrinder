@@ -343,7 +343,7 @@
                     self.newTaskDescription(null);
                     // If selected task is null, get tasks for selected goal
                     if (self.selectedTask() == null) {
-                        self.getTasksForGoal();
+                        self.getTasksForGoal(self.selectedGoal());
                     } else {
                         self.getTasksForTask(self.selectedTask());
                     }
