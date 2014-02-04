@@ -55,7 +55,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="text" data-bind="value: $root.newGoalDescription"/>
+                    <input type="text" data-bind="value: $root.newGoalDescription, valueUpdate: 'keypress', event: { keypress: $root.goalEnterPressed }, hasFocus: $root.goalHasFocus" />
                 </td>
                 <td>
                     <a style="margin-bottom: 10px" class="btn" data-bind="click: $root.addGoal">Add</a>
@@ -98,7 +98,7 @@
             </tr>
             <tr>
                 <td>
-                    <input type="text" data-bind="value: $root.newTaskDescription"/>
+                    <input type="text" data-bind="value: $root.newTaskDescription, valueUpdate: 'keypress', event: { keypress: $root.taskEnterPressed }, hasFocus: $root.taskHasFocus"/>
                 </td>
                 <td>
                     <a style="margin-bottom: 10px" class="btn" data-bind="click: $root.addTask">Add</a>
@@ -219,6 +219,8 @@
         self.newTaskDescription = ko.observable();
         self.selectedTask = ko.observable();
         self.breadCrumb = ko.observableArray();
+        self.goalHasFocus = ko.observable(true);
+        self.taskHasFocus = ko.observable(false);
 
         // Navigation Behaviors
         self.getToDoList = function () { location.hash = "#todo"; };
@@ -298,6 +300,17 @@
                 });
             }
         };
+        self.goalEnterPressed = function(data, event) {
+            var keyCode = (event.which ? event.which : event.keyCode);
+            if (keyCode == 13) {
+                self.addGoal();
+                self.taskHasFocus(false);
+                self.goalHasFocus(true);
+                return false;
+            }
+
+            return true;
+        };
         
         // Task Behaviors
         self.selectTask = function (task) { location.hash = "#task/" + task.ID; };
@@ -369,6 +382,17 @@
                 });
             }
         };
+        self.taskEnterPressed = function(data, event) {
+            var keyCode = (event.which ? event.which : event.keyCode);
+            if (keyCode == 13) {
+                self.addTask();
+                self.goalHasFocus(false);
+                self.taskHasFocus(true);
+                return false;
+            }
+
+            return true;
+        };
 
         // Account Behaviors
         self.changePassword = function() {
@@ -397,6 +421,7 @@
                 self.getTasksForTask(this.params.task);
             });
         }).run();
+
     };
 
     ko.applyBindings(new MeatGrinderViewModel());
