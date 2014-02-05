@@ -23,12 +23,16 @@
     <table id="todoList" class="table table-striped" style="margin-top: 20px">
         <thead>
             <tr>
+                <th style="width: 150px;">Goal</th>
+                <th>Parent Task</th>
                 <th>Task Name</th>
-                <th>Complete</th>
+                <th style="width: 20px;">Complete</th>
             </tr>
         </thead>
         <tbody data-bind="foreach: $data">
             <tr>
+                <td data-bind="text: GoalName"></td>
+                <td data-bind="text: ParentTaskName"></td>
                 <td data-bind="text: Description"></td>
                 <td>
                     <button class="btn" data-bind="click: $root.completeTask">
