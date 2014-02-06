@@ -125,6 +125,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\GoalController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TaskController.cs" />
@@ -133,6 +134,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CustomAuthorize.cs" />
+    <Compile Include="Models\AdminSummaryViewModel.cs" />
     <Compile Include="Models\BreadCrumbModel.cs" />
     <Compile Include="Models\Goal.cs">
       <DependentUpon>MeatGrinder.tt</DependentUpon>

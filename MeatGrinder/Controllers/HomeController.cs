@@ -19,20 +19,6 @@ namespace MeatGrinder.Controllers
         }
 
         [CustomAuthorize]
-        public ActionResult ToDoList()
-        {
-            var viewModel = new TaskViewModel();
-
-            var task = new Task {ID = 0, Description = "Create UI Mockups"};
-            viewModel.Tasks.Add(task);
-
-            task = new Task {ID = 1, Description = "Pick Nose"};
-            viewModel.Tasks.Add(task);
-
-            return Json(viewModel, JsonRequestBehavior.AllowGet);
-        }
-
-        [CustomAuthorize]
         public ActionResult AccountDetails()
         {
             var account = new User

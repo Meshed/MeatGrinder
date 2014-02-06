@@ -12,9 +12,10 @@
 
 <!-- Sections -->
 <div class="center" style="margin-top: 40px">
-    <li class="btn" data-bind="click: $root.getToDoList"><span class="icon-ok"></span> To Do List</li>
+    <a class="btn" data-bind="click: $root.getToDoList"><span class="icon-ok"></span> To Do List</a>
     <a class="btn" data-bind="click: $root.getGoals"><span class="icon-list"></span> Goals</a>
     <!--<li class="btn" data-bind="click: $root.goToAccountSection">Account</li>-->
+    <a class="btn" data-bind="click: $root.getAdminSummary, visible: $root.adminUser">Admin</a>
     <a class="btn" href="/home/logoff"><span class="icon-off"></span> Logoff</a>
 </div>
 
@@ -206,6 +207,16 @@
     </div>
 </div>
 
+<!-- Admin Summary -->
+<div data-bind="with: adminSummaryData">
+    <h2>Admin Summary</h2>
+
+    <div class="row">
+        <div class="span2">Total Users</div>
+        <div class="span1">3</div>
+    </div>
+</div>
+
 <script type="text/javascript">
     function MeatGrinderViewModel() {
         var self = this;
@@ -217,6 +228,7 @@
         self.goalData = ko.observable();
         self.taskData = ko.observable();
         self.accountData = ko.observable();
+        self.adminSummaryData = ko.observable();
         self.showChangePasswordForm = ko.observable(false);
         self.newGoalDescription = ko.observable();
         self.selectedGoal = ko.observable();
@@ -225,6 +237,7 @@
         self.breadCrumb = ko.observableArray();
         self.goalHasFocus = ko.observable(true);
         self.taskHasFocus = ko.observable(false);
+        self.adminUser = ko.observable(false);
 
         // Navigation Behaviors
         self.getToDoList = function () { location.hash = "#todo"; };
@@ -261,7 +274,11 @@
             self.selectedGoal(null);
             self.selectedTask(null);
         };
+        self.getUserType = function () {
+            $.getJSON('Admin/IsUserAdmin', self.adminUser);
+        };
 
+        self.getUserType();
         self.getGoals();
 
         // ToDo Behaviors
@@ -401,6 +418,13 @@
         // Account Behaviors
         self.changePassword = function() {
             self.showChangePasswordForm(true);
+        };
+
+        // Admin Behaviors
+        self.getAdminSummary = function() {
+            self.resetNavigationFlags();
+            self.selectedSection('admin');
+            $.getJSON('Admin/Summary', self.adminSummaryData);
         };
 
         // Client-side routes
