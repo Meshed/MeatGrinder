@@ -15,7 +15,7 @@
     <a class="btn" data-bind="click: $root.getToDoList"><span class="icon-ok"></span> To Do List</a>
     <a class="btn" data-bind="click: $root.getGoals"><span class="icon-list"></span> Goals</a>
     <!--<li class="btn" data-bind="click: $root.goToAccountSection">Account</li>-->
-    <a class="btn" data-bind="click: $root.getAdminSummary, visible: $root.adminUser">Admin</a>
+    <a class="btn" data-bind="click: $root.getAdmin, visible: $root.adminUser">Admin</a>
     <a class="btn" href="/home/logoff"><span class="icon-off"></span> Logoff</a>
 </div>
 
@@ -269,6 +269,7 @@
             self.toDoListData(null);
             self.goalData(null);
             self.taskData(null);
+            self.adminSummaryData(null);
             self.showChangePasswordForm(false);
             self.breadCrumb.removeAll();
             self.selectedGoal(null);
@@ -421,6 +422,7 @@
         };
 
         // Admin Behaviors
+        self.getAdmin = function() { location.hash = "#admin"; };
         self.getAdminSummary = function() {
             self.resetNavigationFlags();
             self.selectedSection('admin');
@@ -432,17 +434,17 @@
             this.get('#todo', function () {
                 self.loadToDoList();
             });
-
+            this.get('#admin', function () {
+                self.getAdminSummary();
+            });
             this.get('#goals', function () {
                 self.loadGoals();
             });
-
             this.get('#goal/:goal', function () {
                 self.selectedGoal(this.params.goal);
                 self.goalData(null);
                 self.getTasksForGoal(this.params.goal);
             });
-
             this.get('#task/:task', function () {
                 self.selectedTask(this.params.task);
                 self.taskData(null);
