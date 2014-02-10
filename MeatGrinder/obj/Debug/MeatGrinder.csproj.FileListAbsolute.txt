@@ -58,4 +58,3 @@ D:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.WebPages.Deployment.xml
 D:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.WebPages.Razor.xml
 D:\workspace\MeatGrinder\MeatGrinder\obj\Debug\MeatGrinder.dll
 D:\workspace\MeatGrinder\MeatGrinder\obj\Debug\MeatGrinder.pdb
-D:\workspace\MeatGrinder\MeatGrinder\obj\Debug\MeatGrinder.csprojResolveAssemblyReference.cache

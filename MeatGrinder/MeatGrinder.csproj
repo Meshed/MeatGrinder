@@ -156,6 +156,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MeatGrinder.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\PartialTask.cs" />
     <Compile Include="Models\Task.cs">
       <DependentUpon>MeatGrinder.tt</DependentUpon>
     </Compile>

@@ -26,6 +26,11 @@ namespace MeatGrinder.Repositories
             return _db.Tasks.Where(m => m.ParentTaskID == taskId &&
                                         m.UserID == userID).ToList();
         }
+
+        public int GetChildTaskCount(int taskID)
+        {
+            return _db.Tasks.Count(m => m.ParentTaskID == taskID);
+        }
         public void Create(Task task)
         {
             task.UserID = CookieService.GetUserID();

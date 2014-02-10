@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using MeatGrinder.Helpers;
 using MeatGrinder.Models;
@@ -31,6 +32,8 @@ namespace MeatGrinder.Controllers
                 viewModel.BreadCrumbs = CreateBreadCrumbs(goal);
             }
 
+            viewModel.Tasks = UpdateChildTaskCounts(viewModel.Tasks);
+
             return Json(viewModel);
         }
         [HttpPost]
@@ -45,7 +48,23 @@ namespace MeatGrinder.Controllers
                 viewModel.BreadCrumbs = CreateBreadCrumbs(task);
             }
 
+            viewModel.Tasks = UpdateChildTaskCounts(viewModel.Tasks);
+
             return Json(viewModel);
+        }
+
+        private List<Task> UpdateChildTaskCounts(List<Task> tasks)
+        {
+            foreach (var task in tasks)
+            {
+                task.ChildTaskCount = _taskRepository.GetChildTaskCount(task.ID);
+                if (task.ChildTaskCount > 0)
+                {
+                    task.Description += " (" + task.ChildTaskCount + ")";                    
+                }
+            }
+
+            return tasks;
         }
 
         public void Create(Task task)
