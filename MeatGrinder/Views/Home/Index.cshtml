@@ -50,9 +50,6 @@
     
     <!-- Goals -->
     <div data-bind="with: $root.goalData">
-        <div class="center section-header">
-            <h1>Goals</h1>
-        </div>
         <!-- Goal Entry -->
         <table class="center table-center" style="margin-top: 20px">
             <tr>
@@ -100,9 +97,6 @@
     </div>
     <!-- Tasks -->
     <div data-bind="with: $root.taskData">
-        <div class="center section-header">
-            <h1>Tasks</h1>
-        </div>
         <!-- Task Entry -->
         <table class="center table-center" style="margin-top: 20px">
             <tr>
@@ -139,7 +133,7 @@
                     <td data-bind="click: $root.selectTask, text: Description"></td>
                     <td style="text-align: center"><i data-bind="css: { 'icon-ok': IsComplete }"></i></td>
                     <td>
-                        <a class="btn" data-bind="click: $root.selectTask" title="Grind Task">Grind</a>
+                        <a class="btn" data-bind="click: $root.selectTask, visible: IsComplete == false" title="Grind Task">Grind</a>
                     </td>
                     <td>
                         <a class="btn" data-bind="click: $root.deleteTask" title="Delete Task"><i class="icon-remove-sign"></i></a>
