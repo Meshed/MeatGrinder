@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Collections.Generic;
+using System.Web.Mvc;
 using MeatGrinder.Helpers;
 using MeatGrinder.Models;
 using MeatGrinder.Repositories;
@@ -22,6 +23,8 @@ namespace MeatGrinder.Controllers
                 Goals = _goalRepository.GetAllForUser()
             };
 
+            viewModel.Goals = UpdateChildTaskCounts(viewModel.Goals);
+
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
@@ -36,6 +39,20 @@ namespace MeatGrinder.Controllers
         public void Delete(Goal goal)
         {
             _goalRepository.Delete(goal);
+        }
+
+        private List<Goal> UpdateChildTaskCounts(List<Goal> goals)
+        {
+            foreach (var goal in goals)
+            {
+                goal.ChildTaskCount = _goalRepository.GetChildTaskCount(goal.ID);
+                if (goal.ChildTaskCount > 0)
+                {
+                    goal.Description += " (" + goal.ChildTaskCount + ")";
+                }
+            }
+
+            return goals;
         }
     }
 }

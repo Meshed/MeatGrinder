@@ -13,6 +13,10 @@ namespace MeatGrinder.Repositories
         {
            return _db.Goals.FirstOrDefault(m => m.ID == id);
         }
+        public int GetChildTaskCount(int goalID)
+        {
+            return _db.Tasks.Count(m => m.GoalID == goalID && m.ParentTaskID == null);
+        }
         public void SetGoalNotComplete(int goalId)
         {
             var goal = _db.Goals.FirstOrDefault(m => m.ID == goalId);
