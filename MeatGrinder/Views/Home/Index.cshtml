@@ -34,7 +34,7 @@
             <tr>
                 <td data-bind="text: GoalName"></td>
                 <td data-bind="text: ParentTaskName"></td>
-                <td data-bind="text: Description"></td>
+                <td data-bind="text: Description, click: $root.todoItemClicked"></td>
                 <td>
                     <button class="btn" data-bind="click: $root.completeTask">
                         <span class="icon-ok"></span>
@@ -302,6 +302,13 @@
                 },
             });
         };
+        self.todoItemClicked = function (todoItem) {
+            if (todoItem.TaskType == 'Task') {
+                location.hash = "#task/" + todoItem.ID;
+            } else {
+                location.hash = "#goal/" + todoItem.ID;
+            }
+        };
         
         // Goal Behaviors
         self.selectGoal = function (goal) { location.hash = "#goal/" + goal.ID; };
@@ -449,11 +456,15 @@
                 self.loadGoals();
             });
             this.get('#goal/:goal', function () {
+                self.resetNavigationFlags();
+                self.selectedSection('goals');
                 self.selectedGoal(this.params.goal);
                 self.goalData(null);
                 self.getTasksForGoal(this.params.goal);
             });
             this.get('#task/:task', function () {
+                self.resetNavigationFlags();
+                self.selectedSection('goals');
                 self.selectedTask(this.params.task);
                 self.taskData(null);
                 self.getTasksForTask(this.params.task);
