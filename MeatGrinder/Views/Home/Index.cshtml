@@ -463,8 +463,10 @@
                 self.getTasksForGoal(this.params.goal);
             });
             this.get('#task/:task', function () {
+                var goalTemp = self.selectedGoal();
                 self.resetNavigationFlags();
                 self.selectedSection('goals');
+                self.selectedGoal(goalTemp);
                 self.selectedTask(this.params.task);
                 self.taskData(null);
                 self.getTasksForTask(this.params.task);
