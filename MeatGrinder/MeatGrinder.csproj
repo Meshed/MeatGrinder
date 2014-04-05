@@ -237,6 +237,8 @@
     <Content Include="Content\themes\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\themes\bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Content\themes\bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="Images\logo-large.png" />
+    <Content Include="Images\logo.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Global.asax" />
