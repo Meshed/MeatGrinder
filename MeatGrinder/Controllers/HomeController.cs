@@ -129,6 +129,12 @@ namespace MeatGrinder.Controllers
             return View("Login", viewModel);
         }
 
+        [HttpGet]
+        public ActionResult Landing()
+        {
+            return new FilePathResult("/Views/Home/landing.html", "text/html");
+        }
+
         private string GetHash(string password)
         {
             MD5 md5Hash = MD5.Create();

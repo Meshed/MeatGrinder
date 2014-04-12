@@ -175,6 +175,8 @@
     <Compile Include="Services\CookieService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\landing\ie.css" />
+    <Content Include="Content\landing\style.css" />
     <Content Include="Images\27319811_6708915_thumbnail.jpg" />
     <Content Include="Content\jquery.dataTables.css" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -237,8 +239,19 @@
     <Content Include="Content\themes\bootstrap\css\bootstrap.min.css" />
     <Content Include="Content\themes\bootstrap\img\glyphicons-halflings-white.png" />
     <Content Include="Content\themes\bootstrap\img\glyphicons-halflings.png" />
+    <Content Include="Images\arrow_down.png" />
+    <Content Include="Images\body-bg.jpg" />
+    <Content Include="Images\body-overlay.png" />
+    <Content Include="Images\header-link-bg.jpg" />
+    <Content Include="Images\header-link-hover.jpg" />
+    <Content Include="Images\header-overlay.png" />
+    <Content Include="Images\info-link-bg.jpg" />
+    <Content Include="Images\info-link-hover.jpg" />
+    <Content Include="Images\lightbox.jpg" />
     <Content Include="Images\logo-large.png" />
     <Content Include="Images\logo.png" />
+    <Content Include="Images\pig.jpg" />
+    <Content Include="Scripts\belated.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Global.asax" />
@@ -279,6 +292,7 @@
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Home\Landing.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
