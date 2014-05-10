@@ -75,6 +75,12 @@ namespace MeatGrinder.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
         [HttpPost]
         public ActionResult Register(LoginViewModel viewModel)
         {

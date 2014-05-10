@@ -9,21 +9,28 @@
     <h5>Don't just plan goals, complete them!</h5>
 </div>
 
-<!-- Login -->
-<div class="center" style="margin-top: 20px;" data-bind="visible: isLoginVisible()">
-    @using (Html.BeginForm())
+<div class="center" style="margin-top: 20px;">
+    @using (Html.BeginForm("Register", "Home"))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary(true)
-        <div>Login</div>
+        <div>Register</div>
         <table class="table-center">
+            <tr>
+                <td class="text-left">
+                    @Html.LabelFor(model => model.AccountName, "Account Name")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.AccountName)
+                    @Html.ValidationMessageFor(model => model.AccountName)
+                </td>
+            </tr>
             <tr>
                 <td class="text-left">
                     @Html.LabelFor(model => model.EmailAddress, "Email Address")
                 </td>
                 <td>
                     @Html.EditorFor(model => model.EmailAddress)
-                    @Html.ValidationMessageFor(model => model.EmailAddress)
                 </td>
             </tr>
             <tr>
@@ -32,12 +39,20 @@
                 </td>
                 <td>
                     @Html.PasswordFor(model => model.Password)
-                    @Html.ValidationMessageFor(model => model.Password)
                 </td>
             </tr>
         </table>
+        
+        <p>
+            By creating an account, you agree to start your 30 day free trial of Meat Grinder, after which point you will be
+            prompted to add billing information and begin a paid subscription.
+        </p>
+        <p>
+            <input type="checkbox" class="checkbox" style="margin-bottom: 4px;" data-bind="checked: userAgrees" /> I agree
+        </p>
+        
         <p style="margin-top: 20px;">
-            <input class="btn btn-primary" type="submit" value="Login" />
+            <input class="btn btn-primary" type="submit" value="Register" data-bind="enable: $root.userAgrees()"/>
             <a href="/Home/Landing" class="btn">Cancel</a>
         </p>
     }
