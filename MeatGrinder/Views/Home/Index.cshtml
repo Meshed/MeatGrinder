@@ -249,10 +249,10 @@
         self.loadToDoList = function() {
             self.resetNavigationFlags();
             self.selectedSection('todo');
-            $.getJSON('ToDo/GetList', self.toDoListData);
+            $.getJSON('/ToDo/GetList', self.toDoListData);
         };
         self.refreshToDoList = function() {
-            $.getJSON('ToDo/GetList', self.toDoListData);
+            $.getJSON('/ToDo/GetList', self.toDoListData);
         };
         self.getGoals = function () { location.hash = "#goals"; };
         self.loadGoals = function() {
@@ -281,7 +281,7 @@
             self.selectedTask(null);
         };
         self.getUserType = function () {
-            $.getJSON('Admin/IsUserAdmin', self.adminUser);
+            $.getJSON('/Admin/IsUserAdmin', self.adminUser);
         };
 
         self.getUserType();
@@ -438,7 +438,7 @@
         self.getAdminSummary = function() {
             self.resetNavigationFlags();
             self.selectedSection('admin');
-            $.getJSON('Admin/Summary', self.adminSummaryData);
+            $.getJSON('/Admin/Summary', self.adminSummaryData);
         };
 
         // Client-side routes
