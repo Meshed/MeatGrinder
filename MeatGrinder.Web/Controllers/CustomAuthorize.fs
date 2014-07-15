@@ -1,8 +1,8 @@
 ﻿module MeatGrinder.Web.Helpers
 open System
 open MeatGrinder.Web.Services
-type CustomAuthorize =
-    inherit System.Web.Mvc.AuthorizeAttribute
+type CustomAuthorize () =
+    inherit System.Web.Mvc.AuthorizeAttribute()
     override x.AuthorizeCore(httpContext) =
         let userId = 0
         let cookieValue = CookieService.GetCookie httpContext "UserID"
