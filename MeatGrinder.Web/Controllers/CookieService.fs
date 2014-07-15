@@ -4,6 +4,7 @@ open System.Web
 [<Sealed>]
 [<AbstractClass>]
 type CookieService =
+    static member userId = "UserId"
     static member GetCookie (context:HttpContextBase) cookieName =
         let httpCookie = context.Request.Cookies.["MeatGrinder"]
         if httpCookie<>null then Some(httpCookie.[cookieName]) else None
@@ -18,5 +19,5 @@ type CookieService =
         CookieService.SetCookie(response, cookieName, -1)
     static member GetUserId () =
         let context = System.Web.HttpContextWrapper System.Web.HttpContext.Current
-        let cookie = CookieService.GetCookie context "UserId"
+        let cookie = CookieService.GetCookie context CookieService.userId
         if cookie.IsSome && cookie.Value<> null then Some(Int32.Parse(cookie.Value)) else None
