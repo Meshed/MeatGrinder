@@ -14,7 +14,7 @@ open System.Security.Cryptography
 
 open MeatGrinder.DAL.Models
 open MeatGrinder.Web.Helpers
-
+open MeatGrinder.Web.Services
 
 type HomeController() =
     inherit Controller()
@@ -48,13 +48,26 @@ type HomeController() =
     member this.Login () = this.View()
     
     [<HttpPost>]
-    member this.Login (viewModel:LoginViewModel) =
+    member this.Login (viewModel:LoginViewModel) :ActionResult =
         if viewModel.Password.IsNullOrEmpty() then this.ModelState.AddModelError(System.String.Empty, "Password is required!")
         if viewModel.EmailAddress.IsNullOrEmpty() then this.ModelState.AddModelError("", "Email address is required!")
         if not this.ModelState.IsValid then
-            this.View(viewModel)
+            this.View(viewModel) :> ActionResult
         else
             let passwordHash = GetHash(viewModel.Password)
             let db = new MeatGrinderEntities()
             let user = db.Users.FirstOrDefault(fun i -> i.Password = passwordHash && i.EmailAddress = viewModel.EmailAddress)
-            this.View(viewModel)
+            if user <> null then
+                CookieService.SetCookie(this.Response, "UserID", 1, user.ID.ToString(System.Globalization.CultureInfo.InvariantCulture))
+                this.RedirectToAction("Index") :> ActionResult
+            else
+                this.ModelState.AddModelError("", "Invalid email or password!");
+                this.View(viewModel) :> ActionResult
+    [<HttpGet>]
+    member this.LogOff () = 
+        CookieService.DeleteCookie this.Response "UserID"
+        this.RedirectToAction("Index")
+
+    [<HttpGet>]
+    member this.Register () = this.View()
+
