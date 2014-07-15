@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MeatGrinder.Models
+namespace MeatGrinder.DAL.Models
 {
     public class GoalViewModel
     {

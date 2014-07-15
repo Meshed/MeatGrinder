@@ -5,11 +5,13 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Mvc;
 using MeatGrinder.Helpers;
-using MeatGrinder.Models;
+
 using MeatGrinder.Services;
 
 namespace MeatGrinder.Controllers
 {
+    using MeatGrinder.DAL.Models;
+
     public class HomeController : Controller
     {
         [CustomAuthorize]

@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using MeatGrinder.Helpers;
-using MeatGrinder.Models;
+
 using MeatGrinder.Repositories;
 
 namespace MeatGrinder.Controllers
 {
+    using MeatGrinder.DAL.Models;
+
     [CustomAuthorize]
     public class GoalController : Controller
     {

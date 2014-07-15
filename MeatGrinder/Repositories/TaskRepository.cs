@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using MeatGrinder.Models;
+
 using MeatGrinder.Services;
 
 namespace MeatGrinder.Repositories
 {
+    using MeatGrinder.DAL.Models;
+
+
     public class TaskRepository
     {
         private readonly MeatGrinderEntities _db = new MeatGrinderEntities();

@@ -7,15 +7,17 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace MeatGrinder.Models
+namespace MeatGrinder.DAL.Models
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class Goal
+    public partial class Task
     {
         public int ID { get; set; }
+        public int GoalID { get; set; }
         public string Description { get; set; }
+        public Nullable<int> ParentTaskID { get; set; }
         public int UserID { get; set; }
         public bool IsComplete { get; set; }
     }

@@ -1,4 +1,4 @@
-﻿namespace MeatGrinder.Models
+﻿namespace MeatGrinder.DAL.Models
 {
     public class LoginViewModel
     {

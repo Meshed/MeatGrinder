@@ -3,11 +3,13 @@ using System.Data.Objects;
 using System.Linq;
 using System.Web.Mvc;
 using MeatGrinder.Helpers;
-using MeatGrinder.Models;
+
 using MeatGrinder.Services;
 
 namespace MeatGrinder.Controllers
 {
+    using MeatGrinder.DAL.Models;
+
     [CustomAuthorize]
     public class TodoController : Controller
     {
@@ -49,23 +51,23 @@ namespace MeatGrinder.Controllers
         private List<TodoViewModel> GetToDoList()
         {
             var todoList = new List<TodoViewModel>();
-            int userID = CookieService.GetUserID();
+            int userId = CookieService.GetUserID();
 
-            var goals = _db.Goals.Where(m => m.IsComplete == false && m.UserID == userID);
+            var goals = _db.Goals.Where(m => m.IsComplete == false && m.UserID == userId);
             foreach (var goal in goals)
             {
                 int goalID = goal.ID;
                 var tasks = _db.Tasks.Where(m => m.IsComplete == false &&
                                                  m.GoalID == goalID &&
                                                  m.ParentTaskID == null &&
-                                                 m.UserID == userID);
+                                                 m.UserID == userId);
                 if (!tasks.Any())
                 {
                     AddGoalWithNoTasksToList(todoList, goal);
                 }
                 else
                 {
-                    GetTodoListTasks(tasks, userID, todoList);
+                    GetTodoListTasks(tasks, userId, todoList);
                 }
             }
 

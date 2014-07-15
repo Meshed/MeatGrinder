@@ -2,11 +2,14 @@
 using System.Linq;
 using System.Web.Mvc;
 using MeatGrinder.Helpers;
-using MeatGrinder.Models;
+
 using MeatGrinder.Repositories;
+using MeatGrinder.Schema;
 
 namespace MeatGrinder.Controllers
 {
+    using MeatGrinder.DAL.Models;
+
     [CustomAuthorize]
     public class TaskController : Controller
     {
@@ -116,11 +119,7 @@ namespace MeatGrinder.Controllers
         }
         private BreadCrumbModel CreateBreadCrumb(string description, int id, string breadCrumbType)
         {
-            var breadCrumb = new BreadCrumbModel
-            {
-                DisplayName = description, 
-                Url = "#" + breadCrumbType + "/" + id
-            };
+            var breadCrumb = new BreadCrumbModel(description,"#" + breadCrumbType + "/" + id);
 
             return breadCrumb;
         }
