@@ -9,6 +9,13 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MeatGrinder.Schema", "MeatG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeatGrinder.DAL", "MeatGrinder.DAL\MeatGrinder.DAL.csproj", "{01B5E6E8-4C76-4B44-82EE-2B563BA7CBF3}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "MeatGrinder.Web", "MeatGrinder.Web\MeatGrinder.Web.fsproj", "{0C0D248C-8C31-4377-8395-525D47CF2748}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CEE6412D-D28F-4979-89D3-F19C1C0111A1}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\packages.config = .nuget\packages.config
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +34,10 @@ Global
 		{01B5E6E8-4C76-4B44-82EE-2B563BA7CBF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01B5E6E8-4C76-4B44-82EE-2B563BA7CBF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01B5E6E8-4C76-4B44-82EE-2B563BA7CBF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C0D248C-8C31-4377-8395-525D47CF2748}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0D248C-8C31-4377-8395-525D47CF2748}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0D248C-8C31-4377-8395-525D47CF2748}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0D248C-8C31-4377-8395-525D47CF2748}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
