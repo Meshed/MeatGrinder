@@ -5,7 +5,7 @@ type CustomAuthorize () =
     inherit System.Web.Mvc.AuthorizeAttribute()
     override x.AuthorizeCore(httpContext) =
         let userId = 0
-        let cookieValue = CookieService.GetCookie httpContext "UserID"
+        let cookieValue = CookieService.GetCookie httpContext CookieService.userId
         if cookieValue.IsSome && cookieValue.Value<>null then Int32.Parse(cookieValue.Value)<>0 else false
 
 

@@ -123,10 +123,13 @@
     <Content Include="Scripts\jquery-2.1.1.js" />
     <Content Include="Scripts\jquery-2.1.1.intellisense.js" />
     <Content Include="Scripts\modernizr-2.7.2.js" />
-    <Compile Include="Controllers\CookieService.fs" />
-    <Compile Include="Controllers\CustomAuthorize.fs" />
+    <Compile Include="Services\CookieService.fs" />
+    <Compile Include="Helpers\CustomAuthorize.fs" />
+    <Compile Include="Repositories\TaskRepository.fs" />
+    <Compile Include="Repositories\GoalRepository.fs" />
     <Compile Include="Controllers\HomeController.fs" />
     <Compile Include="Controllers\ValuesController.fs" />
+    <Compile Include="Controllers\GoalController.fs" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
