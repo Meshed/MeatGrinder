@@ -127,9 +127,12 @@
     <Compile Include="Helpers\CustomAuthorize.fs" />
     <Compile Include="Repositories\TaskRepository.fs" />
     <Compile Include="Repositories\GoalRepository.fs" />
-    <Compile Include="Controllers\HomeController.fs" />
     <Compile Include="Controllers\ValuesController.fs" />
+    <Compile Include="Controllers\HomeController.fs" />
     <Compile Include="Controllers\GoalController.fs" />
+    <Compile Include="Controllers\AdminController.fs" />
+    <Compile Include="Controllers\TaskController.fs" />
+    <Compile Include="Controllers\TodoController.fs" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />

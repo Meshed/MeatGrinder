@@ -26,4 +26,8 @@ type GoalRepository (db:MeatGrinderEntities, getUserId:unit-> int option)=
             deleteTasks <|| (db,db.Tasks.Where(fun m->m.GoalID = goalId))
             db.Goals.Remove goal |> ignore
             db.SaveChanges() |> ignore
-
+    member x.UpdateChildTaskCounts (goals:Goal list) =
+        let upd (g:Goal) = 
+            g.ChildTaskCount <- x.GetChildTaskCount(g.ID)
+            if g.ChildTaskCount>0 then g.Description <- sprintf "%s(%i)" g.Description g.ChildTaskCount
+        goals |> Seq.iter upd
