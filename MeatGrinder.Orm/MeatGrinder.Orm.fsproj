@@ -70,6 +70,13 @@
     <None Include="packages.config" />
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MeatGrinder.Schema\MeatGrinder.Schema.fsproj">
+      <Name>MeatGrinder.Schema</Name>
+      <Project>{ad8f4888-0cf6-4952-b605-f909d30b001e}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>

@@ -18,7 +18,7 @@ type TaskController() =
     let createBreadCrumb description id breadCrumbType =
         {DisplayName=description;Url=sprintf "#%s/%i" breadCrumbType id}
     let createBreadCrumbFromGoal (goal:Goal) =
-        createBreadCrumb goal.Description goal.ID "goal"
+        createBreadCrumb goal.Description goal.Id "goal"
     
     let createBreadCrumbsFromTask (tRepo:TaskRepository) (gRepo:GoalRepository) (task:Task) =
         let taskSeq=
@@ -27,9 +27,9 @@ type TaskController() =
                     |t when t.ParentTaskID.HasValue -> Some(t,tRepo.GetById(t.ParentTaskID.Value))
                     | _ -> None)
             |> Seq.toArray
-        let crumbs = taskSeq        |> Array.map (fun t->createBreadCrumb task.Description task.ID "task" ) |> Array.toList
-        let goal = taskSeq.Last().GoalID |> gRepo.GetById
-        if goal <> null then 
+        let crumbs = taskSeq        |> Array.map (fun t->createBreadCrumb task.Description task.Id "task" ) |> Array.toList
+        let goal = taskSeq.Last().GoalId |> gRepo.GetById
+        if goal.Id>0 then 
              createBreadCrumbFromGoal(goal)::crumbs
         else crumbs
         
@@ -38,13 +38,12 @@ type TaskController() =
         
         use db= new MeatGrinderEntities()
         let goal = GoalRepository(db,CookieService.GetUserId).GetById goalId
-        if goal<>null then
-            let breadCrumbs = [createBreadCrumbFromGoal(goal)].ToList()
-            let tasks = TaskRepository(db,CookieService.GetUserId).GetAllByGoalId(goalId).ToList()
-            let viewModel = TaskViewModel(breadCrumbs,tasks)
+        if goal.Id>0 then
+            let tasks = TaskRepository(db,CookieService.GetUserId).GetAllByGoalId(goalId)
+            let viewModel = {TaskViewModel.Tasks=tasks;BreadCrumbs=[createBreadCrumbFromGoal(goal)]}
             x.Json(viewModel)
         else
-            let viewModel = TaskViewModel(null,null)
+            let viewModel = {TaskViewModel.Tasks=List.empty;BreadCrumbs=List.empty}
             x.Json(viewModel)
     [<HttpPost>]
     member x.GetTasksForTask(taskId) =
@@ -53,15 +52,15 @@ type TaskController() =
         let tRepo = TaskRepository(db,CookieService.GetUserId)
         let gRepo = GoalRepository(db,CookieService.GetUserId)
         let task = tRepo.GetById taskId
-        if task<>null then
+        if task.Id>0 then
 
-            let tasks = tRepo.GetAllByTaskId(taskId).ToList()
-            let breadCrumbs = (createBreadCrumbsFromTask tRepo gRepo task).ToList()
+            let tasks = tRepo.GetAllByTaskId(taskId)
+            let breadCrumbs = (createBreadCrumbsFromTask tRepo gRepo task)
             tRepo.UpdateChildTaskCounts(tasks |> Seq.toList)
-            let viewModel = new TaskViewModel(breadCrumbs,tasks)
+            let viewModel = {TaskViewModel.Tasks=tasks;BreadCrumbs=breadCrumbs}
             x.Json(viewModel)
         else
-            let viewModel = TaskViewModel(null,null)
+            let viewModel = {TaskViewModel.Tasks=List.empty;BreadCrumbs=List.empty}
             x.Json(viewModel)
     member x.Create (task:Task) =
         if x.ModelState.IsValid then 

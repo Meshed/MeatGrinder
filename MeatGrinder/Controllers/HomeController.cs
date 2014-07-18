@@ -15,7 +15,10 @@ namespace MeatGrinder.Controllers
 
     public class HomeController : Controller
     {
+#if DEBUG
+#else 
         [CustomAuthorize]
+#endif
         public ActionResult Index()
         {
             return View();

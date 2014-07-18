@@ -6,9 +6,12 @@ open System.Data.Objects
 open System.Data.Objects.DataClasses
 open System.Linq
 
-type Goal = {mutable Id:int;Description:string;UserId:int;IsComplete:bool}
+open MeatGrinder.Schema
+
+type Goal = {mutable Id:int;mutable Description:string;mutable UserId:int;mutable IsComplete:bool;mutable ChildTaskCount:int option}
 type User = {mutable Id:int;EmailAddress:string;AccountName:string;Password:string;DateCreated:Nullable<DateTime>}
-type Task = {mutable Id:int;GoalId:int;Description:string;ParentTaskID:Nullable<int>;UserId:int;IsComplete:bool}
+type Task = {mutable Id:int;GoalId:int;mutable Description:string;ParentTaskID:Nullable<int>;mutable UserId:int;mutable IsComplete:bool;mutable ChildTaskCount:int option}
+
 
 type MeatGrinderEntities() = 
     inherit DbContext("name=MeatGrinderEntities")
@@ -28,3 +31,4 @@ type MeatGrinderEntities() =
         and set v = _tasks <- v
 
 type GoalViewModel = {Goals:Goal list;}
+type TaskViewModel = {BreadCrumbs: BreadCrumbModel list; Tasks:Task list}
