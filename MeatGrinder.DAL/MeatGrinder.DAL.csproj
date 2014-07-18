@@ -75,7 +75,6 @@
     <Compile Include="Models\TodoList_GetAllForUser_Result.cs">
       <DependentUpon>MeatGrinder.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TodoViewModel.cs" />
     <Compile Include="Models\User.cs">
       <DependentUpon>MeatGrinder.tt</DependentUpon>
     </Compile>

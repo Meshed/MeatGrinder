@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 namespace MeatGrinder.DAL.Models
 {
-    public class TaskViewModel
+    public class TaskViewModel : BreadCrumbWrapper
     {
-        public List<Task> Tasks { get; set; }
-        public List<BreadCrumbModel> BreadCrumbs { get; set; }
-
-        public TaskViewModel()
+        public IList<Task> Tasks { get; private set; }
+        
+        public TaskViewModel(List<BreadCrumbModel> breadCrumbs,IList<Task> tasks):base(breadCrumbs)
         {
-            Tasks = new List<Task>();
-            BreadCrumbs = new List<BreadCrumbModel>();
+            Tasks = tasks??new List<Task>() ;
         }
     }
 }

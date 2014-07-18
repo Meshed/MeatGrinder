@@ -35,25 +35,34 @@ type TaskController() =
         
     [<HttpPost>]
     member x.GetTasksForGoal(goalId) =
-        let viewModel = TaskViewModel()
+        
         use db= new MeatGrinderEntities()
         let goal = GoalRepository(db,CookieService.GetUserId).GetById goalId
         if goal<>null then
-            viewModel.Tasks <- TaskRepository(db,CookieService.GetUserId).GetAllByGoalId(goalId).ToList()
-            viewModel.BreadCrumbs <- [createBreadCrumbFromGoal(goal)].ToList()
-        x.Json(viewModel)
+            let breadCrumbs = [createBreadCrumbFromGoal(goal)].ToList()
+            let tasks = TaskRepository(db,CookieService.GetUserId).GetAllByGoalId(goalId).ToList()
+            let viewModel = TaskViewModel(breadCrumbs,tasks)
+            x.Json(viewModel)
+        else
+            let viewModel = TaskViewModel(null,null)
+            x.Json(viewModel)
     [<HttpPost>]
     member x.GetTasksForTask(taskId) =
-        let viewModel = TaskViewModel()
+        
         use db = new MeatGrinderEntities()
         let tRepo = TaskRepository(db,CookieService.GetUserId)
         let gRepo = GoalRepository(db,CookieService.GetUserId)
         let task = tRepo.GetById taskId
         if task<>null then
-            viewModel.Tasks <- tRepo.GetAllByTaskId(taskId).ToList()
-            viewModel.BreadCrumbs <- (createBreadCrumbsFromTask tRepo gRepo task).ToList()
-        tRepo.UpdateChildTaskCounts(viewModel.Tasks |> Seq.toList)
-        x.Json(viewModel)
+
+            let tasks = tRepo.GetAllByTaskId(taskId).ToList()
+            let breadCrumbs = (createBreadCrumbsFromTask tRepo gRepo task).ToList()
+            tRepo.UpdateChildTaskCounts(tasks |> Seq.toList)
+            let viewModel = new TaskViewModel(breadCrumbs,tasks)
+            x.Json(viewModel)
+        else
+            let viewModel = TaskViewModel(null,null)
+            x.Json(viewModel)
     member x.Create (task:Task) =
         if x.ModelState.IsValid then 
             use db = new MeatGrinderEntities()

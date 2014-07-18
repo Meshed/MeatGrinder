@@ -9,6 +9,7 @@ using MeatGrinder.Services;
 namespace MeatGrinder.Controllers
 {
     using MeatGrinder.DAL.Models;
+    using MeatGrinder.Schema;
 
     [CustomAuthorize]
     public class TodoController : Controller
@@ -28,7 +29,7 @@ namespace MeatGrinder.Controllers
             switch (viewModel.TaskType)
             {
                 case "Task":
-                    var task = _db.Tasks.FirstOrDefault(m => m.ID == viewModel.ID);
+                    var task = _db.Tasks.FirstOrDefault(m => m.ID == viewModel.Id);
 
                     if (task != null)
                     {
@@ -37,7 +38,7 @@ namespace MeatGrinder.Controllers
                     }
                     break;
                 case "Goal":
-                    var goal = _db.Goals.FirstOrDefault(m => m.ID == viewModel.ID);
+                    var goal = _db.Goals.FirstOrDefault(m => m.ID == viewModel.Id);
 
                     if (goal != null)
                     {
@@ -56,14 +57,14 @@ namespace MeatGrinder.Controllers
             var goals = _db.Goals.Where(m => m.IsComplete == false && m.UserID == userId);
             foreach (var goal in goals)
             {
-                int goalID = goal.ID;
+                int goalId = goal.ID;
                 var tasks = _db.Tasks.Where(m => m.IsComplete == false &&
-                                                 m.GoalID == goalID &&
+                                                 m.GoalID == goalId &&
                                                  m.ParentTaskID == null &&
                                                  m.UserID == userId);
                 if (!tasks.Any())
                 {
-                    AddGoalWithNoTasksToList(todoList, goal);
+                    todoList.Add(new TodoViewModel(goal.ID, goal.Description, "Goal", null, null));
                 }
                 else
                 {
@@ -73,14 +74,14 @@ namespace MeatGrinder.Controllers
 
             return todoList;
         }
-        private void GetTodoListTasks(IEnumerable<Task> tasks, int userID, List<TodoViewModel> todoList)
+        private void GetTodoListTasks(IEnumerable<Task> tasks, int userId, List<TodoViewModel> todoList)
         {
             foreach (var parentTask in tasks)
             {
                 int parentTaskID = parentTask.ID;
                 var childTasks = _db.Tasks.Where(m => m.IsComplete == false &&
                                                       m.ParentTaskID == parentTaskID &&
-                                                      m.UserID == userID);
+                                                      m.UserID == userId);
 
                 if (!childTasks.Any())
                 {
@@ -88,25 +89,20 @@ namespace MeatGrinder.Controllers
                 }
                 else
                 {
-                    GetTodoListTasks(childTasks, userID, todoList);
+                    GetTodoListTasks(childTasks, userId, todoList);
                 }
             }
         }
+
         private void AddTaskWithNoTasksToList(List<TodoViewModel> todoList, Task parentTask, int parentTaskID)
         {
-            var todo = new TodoViewModel {Description = parentTask.Description, ID = parentTaskID, TaskType = "Task"};
-
+            
             var goal = _db.Goals.FirstOrDefault(m => m.ID == parentTask.GoalID);
-            if (goal != null) todo.GoalName = goal.Description;
-
             var tempTask = _db.Tasks.FirstOrDefault(m => m.ID == parentTask.ParentTaskID);
-            if (tempTask != null) todo.ParentTaskName = tempTask.Description;
+            var todo = new TodoViewModel(parentTaskID, parentTask.Description, "Task",goal!=null?goal.Description:null,tempTask!=null?tempTask.Description: null);
 
             todoList.Add(todo);
         }
-        private static void AddGoalWithNoTasksToList(List<TodoViewModel> todoList, Goal goal)
-        {
-                todoList.Add(new TodoViewModel {Description = goal.Description, ID = goal.ID, TaskType = "Goal" });
-        }
+       
     }
 }

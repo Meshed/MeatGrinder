@@ -1,4 +1,4 @@
-﻿module MeatGrinder.Web.Controllers
+﻿namespace MeatGrinder.Web.Controllers
 
 open System.Collections.Generic
 open System.Linq

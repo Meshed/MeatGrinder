@@ -27,36 +27,38 @@ namespace MeatGrinder.Controllers
         {
             goal = _goalRepository.GetByID(goal.ID);
 
-            var viewModel = new TaskViewModel();
-
             if (goal != null)
             {
-                viewModel.Tasks = _taskRepository.GetAllByGoalID(goal.ID);
-                viewModel.BreadCrumbs = CreateBreadCrumbs(goal);
+                var tasks = _taskRepository.GetAllByGoalID(goal.ID);
+                UpdateChildTaskCounts(tasks);
+                
+                var viewModel = new TaskViewModel(CreateBreadCrumbs(goal),tasks);
+                
+                return Json(viewModel);
             }
 
-            viewModel.Tasks = UpdateChildTaskCounts(viewModel.Tasks);
-
-            return Json(viewModel);
+            return Json(new TaskViewModel(new List<BreadCrumbModel>(),null));
         }
-        [HttpPost]
-        public ActionResult GetTasksForTask(Task task)
-        {
-            task = _taskRepository.GetByID(task.ID);
 
-            var viewModel = new TaskViewModel();
+        [HttpPost]
+        public ActionResult GetTasksForTask(int taskId)
+        {
+            var task = _taskRepository.GetByID(taskId);
+
             if (task != null)
             {
-                viewModel.Tasks = _taskRepository.GetAllByTaskID(task.ID);
-                viewModel.BreadCrumbs = CreateBreadCrumbs(task);
+                var tasks = _taskRepository.GetAllByTaskID(task.ID);
+                this.UpdateChildTaskCounts(tasks);
+                
+                var viewModel = new TaskViewModel(CreateBreadCrumbs(task),tasks);
+
+                return Json(viewModel);
             }
 
-            viewModel.Tasks = UpdateChildTaskCounts(viewModel.Tasks);
-
-            return Json(viewModel);
+            return Json(new TaskViewModel(new List<BreadCrumbModel>(),null));
         }
 
-        private List<Task> UpdateChildTaskCounts(List<Task> tasks)
+        private void UpdateChildTaskCounts(List<Task> tasks)
         {
             foreach (var task in tasks)
             {
@@ -67,7 +69,6 @@ namespace MeatGrinder.Controllers
                 }
             }
 
-            return tasks;
         }
 
         public void Create(Task task)

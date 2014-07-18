@@ -1,112 +1,75 @@
-﻿//using System.Collections.Generic;
-//using System.Data.Objects;
-//using System.Linq;
-//using System.Web.Mvc;
-//using MeatGrinder.Helpers;
-//
-//using MeatGrinder.Services;
-//
-//namespace MeatGrinder.Controllers
-//{
-//    using MeatGrinder.DAL.Models;
-//
-//    [CustomAuthorize]
-//    public class TodoController : Controller
-//    {
-//        private readonly MeatGrinderEntities _db = new MeatGrinderEntities();
-//
-//        public ActionResult GetList()
-//        {
-//            List<TodoViewModel> viewModel = GetToDoList();
-//
-//            return Json(viewModel, JsonRequestBehavior.AllowGet);
-//        }
-//
-//        [HttpPost]
-//        public void Complete(TodoViewModel viewModel)
-//        {
-//            switch (viewModel.TaskType)
-//            {
-//                case "Task":
-//                    var task = _db.Tasks.FirstOrDefault(m => m.ID == viewModel.ID);
-//
-//                    if (task != null)
-//                    {
-//                        task.IsComplete = true;
-//                        _db.SaveChanges();
-//                    }
-//                    break;
-//                case "Goal":
-//                    var goal = _db.Goals.FirstOrDefault(m => m.ID == viewModel.ID);
-//
-//                    if (goal != null)
-//                    {
-//                        goal.IsComplete = true;
-//                        _db.SaveChanges();
-//                    }
-//                    break;
-//            }
-//        }
-//
-//        private List<TodoViewModel> GetToDoList()
-//        {
-//            var todoList = new List<TodoViewModel>();
-//            int userId = CookieService.GetUserID();
-//
-//            var goals = _db.Goals.Where(m => m.IsComplete == false && m.UserID == userId);
-//            foreach (var goal in goals)
-//            {
-//                int goalID = goal.ID;
-//                var tasks = _db.Tasks.Where(m => m.IsComplete == false &&
-//                                                 m.GoalID == goalID &&
-//                                                 m.ParentTaskID == null &&
-//                                                 m.UserID == userId);
-//                if (!tasks.Any())
-//                {
-//                    AddGoalWithNoTasksToList(todoList, goal);
-//                }
-//                else
-//                {
-//                    GetTodoListTasks(tasks, userId, todoList);
-//                }
-//            }
-//
-//            return todoList;
-//        }
-//        private void GetTodoListTasks(IEnumerable<Task> tasks, int userID, List<TodoViewModel> todoList)
-//        {
-//            foreach (var parentTask in tasks)
-//            {
-//                int parentTaskID = parentTask.ID;
-//                var childTasks = _db.Tasks.Where(m => m.IsComplete == false &&
-//                                                      m.ParentTaskID == parentTaskID &&
-//                                                      m.UserID == userID);
-//
-//                if (!childTasks.Any())
-//                {
-//                    AddTaskWithNoTasksToList(todoList, parentTask, parentTaskID);
-//                }
-//                else
-//                {
-//                    GetTodoListTasks(childTasks, userID, todoList);
-//                }
-//            }
-//        }
-//        private void AddTaskWithNoTasksToList(List<TodoViewModel> todoList, Task parentTask, int parentTaskID)
-//        {
-//            var todo = new TodoViewModel {Description = parentTask.Description, ID = parentTaskID, TaskType = "Task"};
-//
-//            var goal = _db.Goals.FirstOrDefault(m => m.ID == parentTask.GoalID);
-//            if (goal != null) todo.GoalName = goal.Description;
-//
-//            var tempTask = _db.Tasks.FirstOrDefault(m => m.ID == parentTask.ParentTaskID);
-//            if (tempTask != null) todo.ParentTaskName = tempTask.Description;
-//
-//            todoList.Add(todo);
-//        }
-//        private static void AddGoalWithNoTasksToList(List<TodoViewModel> todoList, Goal goal)
-//        {
-//                todoList.Add(new TodoViewModel {Description = goal.Description, ID = goal.ID, TaskType = "Goal" });
-//        }
-//    }
-//}
+﻿namespace MeatGrinder.Controllers
+
+open System.Collections.Generic
+open System.Data.Objects
+open System.Linq
+open System.Web.Mvc
+
+open Microsoft.FSharp.Linq.NullableOperators
+
+open MeatGrinder.Schema
+
+open MeatGrinder.DAL.Models
+open MeatGrinder.Web.Repositories
+open MeatGrinder.Web.Helpers
+open MeatGrinder.Web.Services
+
+[<CustomAuthorize>]
+type TodoController() =
+    inherit Controller()
+
+    //use MeatGrinderEntities _db = new MeatGrinderEntities()
+    member private x.AddTaskWithNoTasksToList (todoList:List<TodoViewModel>) (parentTask:Task) (db:MeatGrinderEntities) =
+        let goal = db.Goals.FirstOrDefault( fun g -> g.ID = parentTask.GoalID)
+        let tempTask = db.Tasks.FirstOrDefault(fun t -> t.ID =? parentTask.ParentTaskID)
+        let todo = {Id=parentTask.ID
+                    Description=parentTask.Description
+                    TaskType= "Task"
+                    GoalName=if goal<>null then goal.Description else null
+                    ParentTaskName = if tempTask<>null then tempTask.Description else null
+                    }
+        todoList.Add(todo);
+
+    member private x.GetTodoListTasks(tasks:IEnumerable<Task>, userId,todoList:List<TodoViewModel>,db:MeatGrinderEntities) =
+        let rec getTodoListTasks (childTasks:IEnumerable<Task>) =
+            childTasks
+            |> Seq.iter (fun parentTask -> 
+                let childTasks = db.Tasks.Where(fun m-> m.IsComplete = false && m.ParentTaskID ?= parentTask.ID && m.UserID = userId)
+                if(childTasks.Any()=false)
+                    then x.AddTaskWithNoTasksToList todoList parentTask db
+                    else getTodoListTasks(childTasks)
+                )
+        getTodoListTasks tasks
+   
+    member private x.GetToDoList() = 
+        let todoList = new List<TodoViewModel>();
+        let userId = CookieService.GetUserId().Value
+        use db= new MeatGrinderEntities()
+        db.Goals.Where(fun m->m.IsComplete=false && m.UserID=userId)
+        |> Seq.iter (fun g-> 
+            let tasks = db.Tasks.Where(fun t->t.IsComplete=false && t.GoalID = g.ID && t.ParentTaskID.HasValue=false && t.UserID = userId)
+            if tasks.Any() 
+            then todoList.Add({Id=g.ID;Description= g.Description;TaskType= "Goal";ParentTaskName=null;GoalName=null})
+            else x.GetTodoListTasks(tasks,userId,todoList,db )
+            )
+        todoList
+
+    member x.GetList() =
+        let viewModel = x.GetToDoList()
+        x.Json(viewModel, JsonRequestBehavior.AllowGet)
+         
+    [<HttpPost>]
+    member x.Complete(viewModel:TodoViewModel) =
+        use db = new MeatGrinderEntities()
+        match viewModel.TaskType with
+        |"Task" -> 
+            let task = db.Tasks.FirstOrDefault(fun m->m.ID=viewModel.Id)
+            if task <> null then
+                task.IsComplete <- true
+                db.SaveChanges() |> ignore
+        |"Goal" ->
+            let goal = db.Goals.FirstOrDefault(fun m->m.ID=viewModel.Id)
+            if goal<> null then
+                goal.IsComplete <- true
+                db.SaveChanges() |> ignore
+        ()
