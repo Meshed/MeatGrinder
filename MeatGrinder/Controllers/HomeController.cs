@@ -44,7 +44,7 @@ namespace MeatGrinder.Controllers
         {
             if (string.IsNullOrEmpty(viewModel.Password))
             {
-                ModelState.AddModelError("", "Password is required!");                
+                ModelState.AddModelError("", "Password is required!");
             }
             if (string.IsNullOrEmpty(viewModel.EmailAddress))
             {
