@@ -51,7 +51,6 @@
     </Compile>
     <Compile Include="Models\GoalExtension.cs" />
     <Compile Include="Models\GoalViewModel.cs" />
-    <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\MeatGrinder.Context.cs">
       <DependentUpon>MeatGrinder.Context.tt</DependentUpon>
       <AutoGen>True</AutoGen>

@@ -12,6 +12,7 @@ open System.Web.Mvc.Ajax
 
 open Extensions
 
+open MeatGrinder.Schema
 open MeatGrinder.DAL.Models
 open MeatGrinder.Web.Helpers
 open MeatGrinder.Web.Services

@@ -135,6 +135,10 @@
     <Compile Include="Controllers\TodoController.fs" />
     <Content Include="Views\Web.config" />
     <Content Include="Views\Home\Index.cshtml" />
+    <None Include="Views\Home\Landing.html" />
+    <None Include="Views\Home\Login.cshtml" />
+    <None Include="Views\Home\LogOff.cshtml" />
+    <None Include="Views\Home\Register.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />

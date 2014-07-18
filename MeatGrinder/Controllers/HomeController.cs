@@ -11,6 +11,7 @@ using MeatGrinder.Services;
 namespace MeatGrinder.Controllers
 {
     using MeatGrinder.DAL.Models;
+    using MeatGrinder.Schema;
 
     public class HomeController : Controller
     {

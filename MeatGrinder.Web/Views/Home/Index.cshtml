@@ -1,10 +1,476 @@
-<div class="jumbotron">
-    <h1>F# + ASP.NET</h1>
-    <p class="lead">Pure F# ASP.NET web apps are a combination of several excellent technologies that allow you to build complex web applications in less time. To make your experience
-            even more appealing, we recommend following the instructions on
-            <a href="http://bloggemdano.blogspot.com/2013/11/adding-new-items-to-pure-f-aspnet.html">this blog post</a> and
-            installing the <a href="http://visualstudiogallery.msdn.microsoft.com/f1dae7fe-1ecc-4f1b-86b5-32a2970d012a?SRC=Home">F# Web Item Templates</a>.
-   </p>
-    <p>To learn more about ASP.NET MVC or Web API visit the <a href="http://go.microsoft.com/fwlink/?LinkId=301870">ASP.NET site</a>.</p>
-    <p>To learn more about web programming in F# visit <a href="http://fsharp.org/webstacks/">fsharp.org</a></p>
+﻿@{
+    ViewBag.Title = "Meat Grinder";
+}
+
+<div class="center">
+    <img src="~/Images/logo-large.png" width="350" style="margin-top: 10px;" />
+    <h5>Don't just plan goals, complete them!</h5>
 </div>
+
+<!-- Sections -->
+<div class="center" style="margin-top: 10px">
+    <a class="btn" data-bind="click: $root.getToDoList"><span class="icon-ok"></span> To Do List</a>
+    <a class="btn" data-bind="click: $root.getGoals"><span class="icon-list"></span> Goals</a>
+    <!--<li class="btn" data-bind="click: $root.goToAccountSection">Account</li>-->
+    <a class="btn" data-bind="click: $root.getAdmin, visible: $root.adminUser">Admin</a>
+    <a class="btn" href="/home/logoff"><span class="icon-off"></span> Logoff</a>
+</div>
+
+<!-- To Do Grid -->
+<div data-bind="with: toDoListData">
+    <table id="todoList" class="table table-striped" style="margin-top: 20px">
+        <thead>
+            <tr>
+                <th style="width: 150px;">Goal</th>
+                <th>Parent Task</th>
+                <th>Task Name</th>
+                <th style="width: 20px;">Complete</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: $data">
+            <tr>
+                <td data-bind="text: GoalName"></td>
+                <td data-bind="text: ParentTaskName"></td>
+                <td data-bind="text: Description, click: $root.todoItemClicked"></td>
+                <td>
+                    <button class="btn" data-bind="click: $root.completeTask">
+                        <span class="icon-ok"></span>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Goal/Task List -->
+<div data-bind="visible: selectedSection() == 'goals'">
+    
+    <!-- Goals -->
+    <div data-bind="with: $root.goalData">
+        <!-- Goal Entry -->
+        <table class="center table-center" style="margin-top: 20px">
+            <tr>
+                <td colspan="2" class="section-header">Add A New Goal</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" data-bind="value: $root.newGoalDescription, valueUpdate: 'keypress', event: { keypress: $root.goalEnterPressed }, hasFocus: $root.goalHasFocus" />
+                </td>
+                <td>
+                    <a style="margin-bottom: 10px" class="btn" data-bind="click: $root.addGoal">Add</a>
+                </td>
+            </tr>
+        </table>
+        <!-- Breadcrumb -->
+        <ul class="breadcrumb" style="margin-top: 10px; margin-bottom: 0px;">
+            <li><a data-bind="click: $root.getGoals"><span class="icon-home"></span> Home</a></li>
+            <!-- ko foreach: $root.goalData().BreadCrumbs -->
+            <span class="divider">/</span> <li data-bind="text: DisplayName"></li>
+            <!-- /ko -->
+        </ul>
+        <!-- Goal Grid -->
+        <table id="goalsTable" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th class="text-left">Description</th>
+                    <th style="width: 40px;">Status</th>
+                    <th style="width: 40px;"></th>
+                    <th style="width: 20px;"></th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: Goals">
+                <tr>
+                    <td data-bind="click: $root.selectGoal, text: Description"></td>
+                    <td style="text-align: center"><i data-bind="css: { 'icon-ok': IsComplete }"></i></td>
+                    <td>
+                        <a class="btn" data-bind="click: $root.selectGoal" title="Grind Goal">Grind</a>
+                    </td>
+                    <td>
+                        <a class="btn" data-bind="click: $root.deleteGoal" title="Delete Goal"><i class="icon-remove-sign"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Tasks -->
+    <div data-bind="with: $root.taskData">
+        <!-- Task Entry -->
+        <table class="center table-center" style="margin-top: 20px">
+            <tr>
+                <td colspan="2" class="section-header">Add A New Task</td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="text" data-bind="value: $root.newTaskDescription, valueUpdate: 'keypress', event: { keypress: $root.taskEnterPressed }, hasFocus: $root.taskHasFocus"/>
+                </td>
+                <td>
+                    <a style="margin-bottom: 10px" class="btn" data-bind="click: $root.addTask">Add</a>
+                </td>
+            </tr>
+        </table>
+        <!-- Breadcrumb -->
+        <ul class="breadcrumb" style="margin-top: 10px; margin-bottom: 0px;">
+            <li><a data-bind="click: $root.getGoals"><span class="icon-home"></span> Home</a></li>
+            <!-- ko foreach: $root.taskData().BreadCrumbs -->
+            <span class="divider">/</span> <li><a data-bind="text: DisplayName, attr: { href: Url }"></a></li>
+            <!-- /ko -->
+        </ul>
+        <!-- Task Grid -->
+        <table id="tasksTable" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th style="width: 40px;">Complete</th>
+                    <th style="width: 40px;"></th>
+                    <th style="width: 20px;"></th>
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: Tasks">
+                <tr>
+                    <td data-bind="click: $root.selectTask, text: Description"></td>
+                    <td style="text-align: center"><i data-bind="css: { 'icon-ok': IsComplete }"></i></td>
+                    <td>
+                        <a class="btn" data-bind="click: $root.selectTask, visible: IsComplete == false" title="Grind Task">Grind</a>
+                    </td>
+                    <td>
+                        <a class="btn" data-bind="click: $root.deleteTask" title="Delete Task"><i class="icon-remove-sign"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Account Section -->
+<div data-bind="with: accountData">
+    <div class="account-details">
+        <div class="center section-header">
+            Account Details
+        </div>
+        <div>
+            <table class="table-center">
+                <tr>
+                    <td>
+                        Account:
+                    </td>
+                    <td>
+                        <label data-bind="text: AccountName"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Email:
+                    </td>
+                    <td>
+                        <label data-bind="text: EmailAddress"></label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    
+    <div class="center" data-bind="visible: $root.showChangePasswordForm() == false">
+        <a class="btn" data-bind="click: $root.changePassword">Change Password</a>        
+    </div>
+    
+    <div data-bind="visible: $root.showChangePasswordForm">
+        Change Password Form        
+    </div>
+
+    <div class="account-summary">
+        <div class="center section-header">
+            Account Summary
+        </div>
+        <div>
+            <table class="table-center">
+                <tr>
+                    <td>
+                        Master Projects:
+                    </td>
+                    <td>
+                        <label data-bind="text: MasterProjectsCount"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Total Projects:
+                    </td>
+                    <td>
+                        <label data-bind="text: TotalProjectsCount"></label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Total Tasks:
+                    </td>
+                    <td>
+                        <label data-bind="text: TotalTasksCount"></label>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Admin Summary -->
+<div data-bind="with: adminSummaryData">
+    <h2>Admin Summary</h2>
+
+    <div class="row">
+        <div class="span2">Total Users</div>
+        <div class="span1" data-bind="text: TotalUserCount"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function MeatGrinderViewModel() {
+        var self = this;
+        
+        self.selectedSection = ko.observable();
+
+        self.sections = ['To Do List', 'Tasks', 'Account'];
+        self.toDoListData = ko.observable();
+        self.goalData = ko.observable();
+        self.taskData = ko.observable();
+        self.accountData = ko.observable();
+        self.adminSummaryData = ko.observable();
+        self.showChangePasswordForm = ko.observable(false);
+        self.newGoalDescription = ko.observable();
+        self.selectedGoal = ko.observable();
+        self.newTaskDescription = ko.observable();
+        self.selectedTask = ko.observable();
+        self.breadCrumb = ko.observableArray();
+        self.goalHasFocus = ko.observable(true);
+        self.taskHasFocus = ko.observable(false);
+        self.adminUser = ko.observable(false);
+
+        // Navigation Behaviors
+        self.getToDoList = function () { location.hash = "#todo"; };
+        self.loadToDoList = function() {
+            self.resetNavigationFlags();
+            self.selectedSection('todo');
+            $.getJSON('/ToDo/GetList', self.toDoListData);
+        };
+        self.refreshToDoList = function() {
+            $.getJSON('/ToDo/GetList', self.toDoListData);
+        };
+        self.getGoals = function () { location.hash = "#goals"; };
+        self.loadGoals = function() {
+            self.resetNavigationFlags();
+            self.selectedSection('goals');
+            $.getJSON('/goal/getall', self.goalData);
+        };
+        self.refreshGoals = function() {
+            $.getJSON('/goal/getall', self.goalData);
+        };
+
+        self.goToAccountSection = function () {
+            self.resetNavigationFlags();
+            self.selectedSection('account');
+            $.getJSON('/home/AccountDetails', self.accountData);
+        };
+        self.resetNavigationFlags = function() {
+            self.accountData(null);
+            self.toDoListData(null);
+            self.goalData(null);
+            self.taskData(null);
+            self.adminSummaryData(null);
+            self.showChangePasswordForm(false);
+            self.breadCrumb.removeAll();
+            self.selectedGoal(null);
+            self.selectedTask(null);
+        };
+        self.getUserType = function () {
+            $.getJSON('/Admin/IsUserAdmin', self.adminUser);
+        };
+
+        self.getUserType();
+        self.getGoals();
+
+        // ToDo Behaviors
+        self.completeTask = function (task) {
+            $.ajax({
+                type: "POST",
+                url: '/todo/Complete',
+                data: ko.toJSON(task), //{ ID: task.ID, Description: task.Description, TaskType: task.TaskType },
+                contentType: 'application/json',
+                success: function () {
+                    self.refreshToDoList();
+                },
+            });
+        };
+        self.todoItemClicked = function (todoItem) {
+            if (todoItem.TaskType == 'Task') {
+                location.hash = "#task/" + todoItem.ID;
+            } else {
+                location.hash = "#goal/" + todoItem.ID;
+            }
+        };
+        
+        // Goal Behaviors
+        self.selectGoal = function (goal) { location.hash = "#goal/" + goal.ID; };
+        self.addGoal = function () {            
+            $.ajax({
+                url: '/goal/create',
+                data: { Description: self.newGoalDescription() },
+                contentType: 'application/json',
+                success: function () {
+                    self.newGoalDescription(null);
+                    self.refreshGoals();
+                },
+            });
+        };
+        self.deleteGoal = function (goal) {
+            var response = confirm("Are you sure you want to delete the goal: " + goal.Description + "?");
+
+            if (response == true) {
+                $.ajax({
+                    url: '/goal/delete',
+                    data: { ID: goal.ID },
+                    contentType: 'application/json',
+                    success: function () {
+                        self.refreshGoals();
+                    }
+                });
+            }
+        };
+        self.goalEnterPressed = function(data, event) {
+            var keyCode = (event.which ? event.which : event.keyCode);
+            if (keyCode == 13) {
+                self.addGoal();
+                self.taskHasFocus(false);
+                self.goalHasFocus(true);
+                return false;
+            }
+
+            return true;
+        };
+        
+        // Task Behaviors
+        self.selectTask = function (task) { location.hash = "#task/" + task.ID; };
+        self.getTasksForGoal = function (id) {
+            $.ajax({
+                type: 'POST',
+                url: '/task/GetTasksForGoal',
+                data: ko.toJSON({ ID: id }),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (results) {
+                    self.taskData(results);
+                }
+            });
+        };
+        self.getTasksForTask = function (id) {
+            $.ajax({
+                type: 'POST',
+                url: '/task/GetTasksForTask',
+                data: ko.toJSON({ ID: id }),
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (results) {
+                    self.taskData(results);
+                }
+            });
+        };
+        self.addTask = function () {
+            var parentTaskID;
+            
+            // If selected task is null, selected task ID is 0
+            if (self.selectedTask() == null) {
+                parentTaskID = null;
+            } else {
+                parentTaskID = self.selectedTask();
+            }
+
+            $.ajax({
+                url: '/task/create',
+                data: { Description: self.newTaskDescription(), GoalID: self.selectedGoal(), ParentTaskID: parentTaskID },
+                contentType: 'application/json',
+                success: function() {
+                    self.newTaskDescription(null);
+                    // If selected task is null, get tasks for selected goal
+                    if (self.selectedTask() == null) {
+                        self.getTasksForGoal(self.selectedGoal());
+                    } else {
+                        self.getTasksForTask(self.selectedTask());
+                    }
+                    // Otherwise, get selected tasks for goal
+                }
+            });
+        };
+        self.deleteTask = function (task) {
+            var response = confirm("Are you sure you want to delete the task: " + task.Description + "?");
+
+            if (response == true){
+                $.ajax({
+                    url: '/task/delete',
+                    data: { ID: task.ID },
+                    contentType: 'application/json',
+                    success: function () {
+                        if (task.ParentTaskID != null) {
+                            self.getTasksForTask(task.ParentTaskID);
+                        } else {
+                            self.getTasksForGoal(task.GoalID);
+                        }
+                    }
+                });
+            }
+        };
+        self.taskEnterPressed = function(data, event) {
+            var keyCode = (event.which ? event.which : event.keyCode);
+            if (keyCode == 13) {
+                self.addTask();
+                self.goalHasFocus(false);
+                self.taskHasFocus(true);
+                return false;
+            }
+
+            return true;
+        };
+
+        // Account Behaviors
+        self.changePassword = function() {
+            self.showChangePasswordForm(true);
+        };
+
+        // Admin Behaviors
+        self.getAdmin = function() { location.hash = "#admin"; };
+        self.getAdminSummary = function() {
+            self.resetNavigationFlags();
+            self.selectedSection('admin');
+            $.getJSON('/Admin/Summary', self.adminSummaryData);
+        };
+
+        // Client-side routes
+        Sammy(function () {
+            this.get('#todo', function () {
+                self.loadToDoList();
+            });
+            this.get('#admin', function () {
+                self.getAdminSummary();
+            });
+            this.get('#goals', function () {
+                self.loadGoals();
+            });
+            this.get('#goal/:goal', function () {
+                self.resetNavigationFlags();
+                self.selectedSection('goals');
+                self.selectedGoal(this.params.goal);
+                self.goalData(null);
+                self.getTasksForGoal(this.params.goal);
+            });
+            this.get('#task/:task', function () {
+                var goalTemp = self.selectedGoal();
+                self.resetNavigationFlags();
+                self.selectedSection('goals');
+                self.selectedGoal(goalTemp);
+                self.selectedTask(this.params.task);
+                self.taskData(null);
+                self.getTasksForTask(this.params.task);
+            });
+        }).run();
+
+    };
+
+    ko.applyBindings(new MeatGrinderViewModel());
+</script>

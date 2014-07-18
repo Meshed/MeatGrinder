@@ -1,0 +1,59 @@
+﻿@model MeatGrinder.DAL.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<div class="center">
+    <img src="~/Images/logo-large.png" width="350" style="margin-top: 10px;" />
+    <h5>Don't just plan goals, complete them!</h5>
+</div>
+
+<!-- Login -->
+<div class="center" style="margin-top: 20px;" data-bind="visible: isLoginVisible()">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <div>Login</div>
+        <table class="table-center">
+            <tr>
+                <td class="text-left">
+                    @Html.LabelFor(model => model.EmailAddress, "Email Address")
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.EmailAddress)
+                    @Html.ValidationMessageFor(model => model.EmailAddress)
+                </td>
+            </tr>
+            <tr>
+                <td class="text-left">
+                    @Html.LabelFor(model => model.Password)
+                </td>
+                <td>
+                    @Html.PasswordFor(model => model.Password)
+                    @Html.ValidationMessageFor(model => model.Password)
+                </td>
+            </tr>
+        </table>
+        <p style="margin-top: 20px;">
+            <input class="btn btn-primary" type="submit" value="Login" />
+            <a href="/Home/Landing" class="btn">Cancel</a>
+        </p>
+    }
+</div>
+
+<script type="text/javascript">
+    function LoginViewModel() {
+        var self = this;
+
+        // Variables
+        self.userAgrees = ko.observable(false);
+    };
+
+    ko.applyBindings(new LoginViewModel());
+</script>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
