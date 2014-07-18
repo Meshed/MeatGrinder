@@ -232,9 +232,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MeatGrinder.DAL\MeatGrinder.DAL.csproj">
-      <Name>MeatGrinder.DAL</Name>
-      <Project>{01b5e6e8-4c76-4b44-82ee-2b563ba7cbf3}</Project>
+    <ProjectReference Include="..\MeatGrinder.Orm\MeatGrinder.Orm.fsproj">
+      <Name>MeatGrinder.Orm</Name>
+      <Project>{ddd46712-5b66-4d68-8708-176b1f607bdc}</Project>
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\MeatGrinder.Schema\MeatGrinder.Schema.fsproj">

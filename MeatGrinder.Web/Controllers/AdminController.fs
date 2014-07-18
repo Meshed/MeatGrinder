@@ -4,7 +4,7 @@ open System.Collections.Generic
 open System.Linq
 open System.Web.Mvc
 
-open MeatGrinder.DAL.Models
+open MeatGrinder.Orm
 open MeatGrinder.Schema
 open MeatGrinder.Web.Repositories
 open MeatGrinder.Web.Helpers
@@ -24,9 +24,9 @@ type AdminController() =
         let isUserAdmin = 
             let userId = CookieService.GetUserId()
             if userId.IsSome then
-                let user = db.Users.FirstOrDefault(fun m->m.ID=userId.Value)
+                let user = db.Users.FirstOrDefault(fun m->m.Id=userId.Value)
                 match user with
-                | admin when admin<>null && admin.EmailAddress="marksbrown@gmail.com" -> true
+                | admin when admin.EmailAddress="marksbrown@gmail.com" -> true
                 | _ -> false
             else false
         x.Json(isUserAdmin, allowGet)

@@ -4,7 +4,7 @@ open System.Collections.Generic
 open System.Linq
 open System.Web.Mvc
 
-open MeatGrinder.DAL.Models
+open MeatGrinder.Orm
 
 open MeatGrinder.Schema
 

@@ -13,7 +13,7 @@ open System.Web.Mvc.Ajax
 open Extensions
 
 open MeatGrinder.Schema
-open MeatGrinder.DAL.Models
+open MeatGrinder.Orm
 open MeatGrinder.Web.Helpers
 open MeatGrinder.Web.Services
 
@@ -48,7 +48,7 @@ type HomeController() =
 
     [<CustomAuthorize>]
     member this.AccountDetails () = 
-        let account = new MeatGrinder.DAL.Models.User (AccountName="Meshed",EmailAddress="marksbrown@gmail.com")
+        let account = {Id=0;AccountName="Meshed";EmailAddress="marksbrown@gmail.com";Password=null;DateCreated=Nullable()}
         this.Json(account,JsonRequestBehavior.AllowGet)
 
     [<HttpGet>]
@@ -64,8 +64,8 @@ type HomeController() =
             let passwordHash = GetHash(viewModel.Password)
             use db = new MeatGrinderEntities()
             let user = db.Users.FirstOrDefault(fun i -> i.Password = passwordHash && i.EmailAddress = viewModel.EmailAddress)
-            if user <> null then
-                CookieService.SetCookie(this.Response, CookieService.userId, 1, user.ID.ToString(CultureInfo.InvariantCulture))
+            if user.Id>0 then
+                CookieService.SetCookie(this.Response, CookieService.userId, 1, user.Id.ToString(CultureInfo.InvariantCulture))
                 this.RedirectToAction("Index") :> ActionResult
             else
                 this.ModelState.AddModelError("", "Invalid email or password!");
@@ -77,6 +77,7 @@ type HomeController() =
 
     [<HttpGet>]
     member this.Register () = this.View()
+
     [<HttpPost>]
     member this.Register (viewModel:LoginViewModel) :ActionResult =
         this.Required viewModel.EmailAddress "Email address is required!"
@@ -89,16 +90,16 @@ type HomeController() =
             use db = new MeatGrinderEntities()
             match db.Users.FirstOrDefault( fun m -> m.AccountName=viewModel.AccountName || m.EmailAddress=viewModel.EmailAddress) 
                 with
-                | acc when acc<>null && acc.AccountName=viewModel.AccountName -> 
+                | acc when acc.Id>0 && acc.AccountName=viewModel.AccountName -> 
                     toLogin "Account name already exists. Please try again." this.View
-                | em when em<> null && em.EmailAddress=viewModel.EmailAddress ->
+                | em when em.Id>0 && em.EmailAddress=viewModel.EmailAddress ->
                     toLogin "Email address already exists. Please try again." this.View
                 | _ -> 
-                    let user = User(AccountName=viewModel.AccountName, EmailAddress=viewModel.EmailAddress, Password = GetHash(viewModel.Password),
-                                    DateCreated = Nullable(DateTime.Now))
+                    let user = {User.Id=0;AccountName=viewModel.AccountName;EmailAddress=viewModel.EmailAddress;Password = GetHash(viewModel.Password);
+                                    DateCreated = Nullable(DateTime.Now)}
                     db.Users.Add(user) |> ignore
                     db.SaveChanges() |> ignore
-                    CookieService.SetCookie(this.Response, CookieService.userId, 1, user.ID.ToString(CultureInfo.InvariantCulture));
+                    CookieService.SetCookie(this.Response, CookieService.userId, 1, user.Id.ToString(CultureInfo.InvariantCulture));
                     this.RedirectToAction("Index") :> ActionResult
         else 
             this.View("Login", viewModel) :> ActionResult
