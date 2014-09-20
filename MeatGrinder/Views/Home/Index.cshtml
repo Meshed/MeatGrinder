@@ -33,7 +33,7 @@
                 <td data-bind="text: ParentTaskName"></td>
                 <td data-bind="text: Description, click: $root.todoItemClicked"></td>
                 <td>
-                    <button class="btn" data-bind="click: $root.completeTask">
+                    <button class="btn" data-bind="click: $root.completeTaskRefreshToDoList">
                         <span class="icon-ok"></span>
                     </button>
                 </td>
@@ -131,7 +131,10 @@
                         <a class="btn" data-bind="click: $root.deleteTask" title="Delete Task"><i class="icon-trash"></i></a>
                     </td>
                     <td data-bind="click: $root.selectTask, text: Description"></td>
-                    <td style="text-align: center"><i data-bind="css: { 'icon-ok': IsComplete }"></i></td>
+                    <td style="text-align: center">
+                        <i data-bind="css: { 'icon-ok': IsComplete }"></i>
+                        <a class="btn" data-bind="click: $root.completeTask, visible: IsComplete == false" title="Complete Task"><i class="icon-ok"></i></a>
+                    </td>
                     <td>
                         <a class="btn" data-bind="click: $root.selectTask, visible: IsComplete == false" title="Grind Task">View</a>
                     </td>
@@ -288,7 +291,7 @@
         self.getGoals();
 
         // ToDo Behaviors
-        self.completeTask = function (task) {
+        self.completeTaskRefreshToDoList = function (task) {
             $.ajax({
                 type: "POST",
                 url: '/todo/Complete',
@@ -426,6 +429,27 @@
             }
 
             return true;
+        };
+        self.completeTask = function (task) {
+            if (task.ParentTaskID != null) {
+                task.TaskType = "Goal";
+            } else {
+                task.TaskType = "Task";
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/todo/Complete',
+                data: ko.toJSON(task), //{ ID: task.ID, Description: task.Description, TaskType: task.TaskType },
+                contentType: 'application/json',
+                success: function () {
+                    if (task.ParentTaskID != null) {
+                        self.getTasksForTask(task.ParentTaskID);
+                    } else {
+                        self.getTasksForGoal(task.GoalID);
+                    }
+                },
+            });
         };
 
         // Account Behaviors

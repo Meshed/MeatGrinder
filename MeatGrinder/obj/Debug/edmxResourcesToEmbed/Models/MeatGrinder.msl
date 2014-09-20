@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MeatGrinderModelStoreContainer" CdmEntityContainer="MeatGrinderEntities">
+    <EntitySetMapping Name="Goals">
+      <EntityTypeMapping TypeName="MeatGrinderModel.Goal">
+        <MappingFragment StoreEntitySet="Goal">
+          <ScalarProperty Name="IsComplete" ColumnName="IsComplete" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tasks">
+      <EntityTypeMapping TypeName="MeatGrinderModel.Task">
+        <MappingFragment StoreEntitySet="Task">
+          <ScalarProperty Name="IsComplete" ColumnName="IsComplete" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="GoalID" ColumnName="GoalID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ParentTaskID" ColumnName="ParentTaskID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="MeatGrinderModel.User">
+        <MappingFragment StoreEntitySet="User">
+          <ScalarProperty Name="DateCreated" ColumnName="DateCreated" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+          <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="TodoList_GetAllForUser" FunctionName="MeatGrinderModel.Store.TodoList_GetAllForUser">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="MeatGrinderModel.TodoList_GetAllForUser_Result">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="TaskType" ColumnName="TaskType" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>
