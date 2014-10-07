@@ -31,8 +31,16 @@ namespace MeatGrinder.Controllers
                     if (task != null)
                     {
                         task.IsComplete = true;
-                        _db.SaveChanges();
                     }
+
+                    var childTasks = _db.Tasks.Where(m => m.ParentTaskID == viewModel.ID);
+
+                    foreach (var childTask in childTasks)
+                    {
+                        childTask.IsComplete = true;
+                    }
+
+                    _db.SaveChanges();
                     break;
                 case "Goal":
                     var goal = _db.Goals.FirstOrDefault(m => m.ID == viewModel.ID);

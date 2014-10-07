@@ -431,11 +431,7 @@
             return true;
         };
         self.completeTask = function (task) {
-            if (task.ParentTaskID != null) {
-                task.TaskType = "Goal";
-            } else {
-                task.TaskType = "Task";
-            }
+            task.TaskType = "Task";
 
             $.ajax({
                 type: "POST",
