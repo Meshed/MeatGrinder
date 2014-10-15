@@ -300,6 +300,7 @@
     <Content Include="Scripts\sammy-0.7.4.js" />
     <Content Include="Scripts\sammy-0.7.4.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Home\Landing_Original.html" />
     <Content Include="Views\Home\Landing.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
