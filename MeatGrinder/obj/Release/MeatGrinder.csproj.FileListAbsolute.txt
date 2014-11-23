@@ -29,3 +29,28 @@ C:\Users\Mark Brown\Desktop\MeatGrinder\MeatGrinder\bin\System.Web.WebPages.Razo
 C:\Users\Mark Brown\Desktop\MeatGrinder\MeatGrinder\obj\Release\MeatGrinder.csprojResolveAssemblyReference.cache
 C:\Users\Mark Brown\Desktop\MeatGrinder\MeatGrinder\obj\Release\MeatGrinder.dll
 C:\Users\Mark Brown\Desktop\MeatGrinder\MeatGrinder\obj\Release\MeatGrinder.pdb
+C:\workspace\MeatGrinder\MeatGrinder\bin\MeatGrinder.dll.config
+C:\workspace\MeatGrinder\MeatGrinder\bin\MeatGrinder.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\MeatGrinder.pdb
+C:\workspace\MeatGrinder\MeatGrinder\bin\Antlr3.Runtime.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\EntityFramework.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\Microsoft.Web.Infrastructure.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\Newtonsoft.Json.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.Mvc.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.Optimization.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.Providers.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.Razor.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.WebPages.Deployment.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.WebPages.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.WebPages.Razor.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\WebGrease.dll
+C:\workspace\MeatGrinder\MeatGrinder\bin\EntityFramework.xml
+C:\workspace\MeatGrinder\MeatGrinder\bin\Newtonsoft.Json.xml
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.Mvc.xml
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.Razor.xml
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.WebPages.xml
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.WebPages.Deployment.xml
+C:\workspace\MeatGrinder\MeatGrinder\bin\System.Web.WebPages.Razor.xml
+C:\workspace\MeatGrinder\MeatGrinder\obj\Release\MeatGrinder.csprojResolveAssemblyReference.cache
+C:\workspace\MeatGrinder\MeatGrinder\obj\Release\MeatGrinder.dll
+C:\workspace\MeatGrinder\MeatGrinder\obj\Release\MeatGrinder.pdb
